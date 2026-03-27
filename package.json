@@ -22,7 +22,7 @@
     "test:nuxt": "vitest --project nuxt",
     "test:browser": "playwright test",
     "test:browser:ui": "playwright test --ui",
-    "test:browser:update": "docker run --rm --network host -v $(pwd):/work/ -v /tmp/playwright-node-modules:/work/node_modules -w /work/ -it mcr.microsoft.com/playwright:v1.58.2-noble bash -c 'corepack enable && pnpm i && pnpm playwright test test/browser --update-snapshots'"
+    "test:browser:update": "docker run --rm --network host -v $(pwd):/work/ -v /tmp/playwright-node-modules:/work/node_modules -w /work/ -it mcr.microsoft.com/playwright:v1.58.2-noble bash -c 'corepack enable && pnpm i && pnpm playwright test tests --update-snapshots'"
   },
   "dependencies": {
     "@atproto/api": "^0.19.5",
