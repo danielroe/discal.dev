@@ -1,5 +1,5 @@
 {
-  "name": "nuxt-app",
+  "name": "discal.dev",
   "license": "MIT",
   "private": true,
   "type": "module",
@@ -25,19 +25,29 @@
     "test:browser:update": "docker run --rm --network host -v $(pwd):/work/ -v /tmp/playwright-node-modules:/work/node_modules -w /work/ -it mcr.microsoft.com/playwright:v1.55.0-noble bash -c 'corepack enable && pnpm i && pnpm playwright test test/browser --update-snapshots'"
   },
   "dependencies": {
+    "@atproto/api": "^0.19.5",
+    "@atproto/oauth-client-node": "^0.3.17",
     "@nuxt/eslint": "^1.12.1",
     "@nuxt/fonts": "^0.12.1",
     "@nuxt/image": "^2.0.0",
     "@nuxt/scripts": "^0.13.2",
     "@nuxtjs/html-validator": "^2.1.0",
+    "@touch4it/ical-timezones": "^1.9.0",
+    "ical-generator": "^10.1.0",
     "nuxt": "^4.2.2",
+    "nuxt-auth-utils": "^0.5.29",
     "nuxt-og-image": "^5.1.13",
+    "reka-ui": "^2.9.2",
+    "rrule": "^2.8.1",
     "unplugin-vue-router": "^0.19.2",
     "vue": "3.5.26"
   },
   "devDependencies": {
     "@nuxt/test-utils": "3.23.0",
     "@playwright/test": "1.57.0",
+    "@upstash/redis": "^1.37.0",
+    "@vite-pwa/assets-generator": "^1.0.2",
+    "@vite-pwa/nuxt": "^1.1.1",
     "@vitest/browser-playwright": "^4.0.17",
     "@vitest/coverage-v8": "^4.0.17",
     "@vue/test-utils": "2.4.6",
