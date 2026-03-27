@@ -2,14 +2,13 @@ export default defineNuxtConfig({
   modules: [
     '@nuxt/eslint',
     '@nuxtjs/html-validator',
-    '@nuxt/scripts',
     '@nuxt/fonts',
-    '@nuxt/image',
     'nuxt-og-image',
     'nuxt-auth-utils',
     'reka-ui/nuxt',
     '@vite-pwa/nuxt',
     '@nuxt/test-utils',
+    '@unocss/nuxt',
   ],
 
   devtools: { enabled: true },
@@ -75,7 +74,11 @@ export default defineNuxtConfig({
     },
   },
 
-  vite: { optimizeDeps: { include: ['reka-ui'] } },
+  vite: {
+    optimizeDeps: {
+      include: ['reka-ui'],
+    },
+  },
 
   auth: {
     atproto: true,

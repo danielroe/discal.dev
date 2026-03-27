@@ -1,5 +1,8 @@
 <script setup lang="ts">
-defineOgImage()
+defineOgImage('NuxtSeo.takumi', {
+  title: 'discal.dev - Discord Events as Calendars',
+  description: 'Subscribe to Discord server events via ICS calendar feeds. Sync to AT Protocol.',
+})
 
 useSeoMeta({
   title: 'discal.dev - Discord Events as Calendars',
