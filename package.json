@@ -43,7 +43,7 @@
     "vue": "3.5.31"
   },
   "devDependencies": {
-    "@nuxt/test-utils": "3.23.0",
+    "@nuxt/test-utils": "4.0.0",
     "@playwright/test": "1.58.2",
     "@upstash/redis": "^1.37.0",
     "@vite-pwa/assets-generator": "^1.0.2",
