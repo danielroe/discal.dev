@@ -30,6 +30,10 @@ export default defineNuxtConfig({
         clientId: '',
         clientSecret: '',
       },
+      bluesky: {
+        scope: ['atproto', 'repo:community.lexicon.calendar.event', 'repo:community.lexicon.calendar.rsvp'],
+        redirectUris: ['/auth/bluesky'],
+      },
     },
     public: {
       appUrl: 'http://localhost:3000',

@@ -62,13 +62,7 @@ let _client: NodeOAuthClient | null = null
 export function getAtprotoClient(event: H3Event): NodeOAuthClient {
   if (_client) return _client
   _client = new NodeOAuthClient({
-    clientMetadata: getAtprotoClientMetadata(event, 'bluesky', {
-      scope: [
-        'atproto',
-        'repo:community.lexicon.calendar.event',
-        'repo:community.lexicon.calendar.rsvp',
-      ],
-    }),
+    clientMetadata: getAtprotoClientMetadata(event, 'bluesky'),
     sessionStore: kvSessionStore(),
     stateStore: kvStateStore(),
     requestLock: async <T>(key: string, fn: () => T | PromiseLike<T>): Promise<T> => {
