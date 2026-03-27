@@ -20,9 +20,7 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    const url = await client.authorize(handle, {
-      scope: 'atproto repo:community.lexicon.calendar.event repo:community.lexicon.calendar.rsvp',
-    })
+    const url = await client.authorize(handle)
     return sendRedirect(event, url.toString())
   }
 
