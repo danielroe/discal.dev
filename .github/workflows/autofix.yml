@@ -1,0 +1,42 @@
+# needed to securely identify the workflow
+name: autofix.ci
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  code:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      - run: npm i -g --force corepack && corepack enable
+      - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
+        with:
+          node-version: lts/*
+          cache: "pnpm"
+
+      - name: 📦 Install dependencies
+        run: pnpm install
+
+      - name: 📦 Install browsers
+        run: pnpm playwright install
+
+      - name: 🔠 Fix lint errors
+        run: pnpm lint --fix
+
+      - name: 🧪 Update unit test snapshots
+        run: pnpm test:unit -u
+
+      - name: 🏃 Update component test snapshots
+        run: pnpm test:nuxt -u
+
+      - name: 🖥️ Update browser test snapshots
+        run: pnpm test:browser --update-snapshots
+
+      - uses: autofix-ci/action@635ffb0c9798bd160680f18fd73371e355b85f27 # 635ffb0c9798bd160680f18fd73371e355b85f27
