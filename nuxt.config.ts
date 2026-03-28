@@ -51,6 +51,10 @@ export default defineNuxtConfig({
     },
   },
 
+  routeRules: {
+    '/_og/s/c_Discal.png': { prerender: true },
+  },
+
   future: {
     compatibilityVersion: 4,
   },
