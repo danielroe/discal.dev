@@ -46,6 +46,7 @@ async function syncGuildEvents(h3Event: Parameters<typeof publishEventToAtproto>
       || (stored.location || null) !== (de.entity_metadata?.location || null)
       || JSON.stringify(stored.recurrenceRule) !== JSON.stringify(de.recurrence_rule)
     )
+    const needsPublish = !stored?.atprotoUri
     const needsRepublish = stored?.atprotoUri
       && stored.atprotoRecordVersion !== ATPROTO_RECORD_VERSION
 
@@ -71,7 +72,7 @@ async function syncGuildEvents(h3Event: Parameters<typeof publishEventToAtproto>
 
     await setEvent(eventData)
 
-    if (guild.atprotoDid && (isNew || isUpdated || needsRepublish)) {
+    if (guild.atprotoDid && (isNew || isUpdated || needsPublish || needsRepublish)) {
       const result = await publishEventToAtproto(h3Event, eventData, guild)
       if (result) {
         eventData.atprotoUri = result.uri
