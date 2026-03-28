@@ -215,7 +215,7 @@ async function registerGuild(guildId: string, guildName: string) {
               variant="accent"
               :href="botInviteUrl"
             >
-              Add bot
+              add bot
             </AppButton>
           </div>
         </AppCard>
