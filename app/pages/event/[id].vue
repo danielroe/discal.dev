@@ -81,7 +81,7 @@ function loginAtproto() {
         <!-- Header -->
         <div class="mb-8">
           <NuxtLink
-            :to="`/calendar/${guild.calendarSlug}`"
+            :to="`/dashboard/${guild.id}`"
             class="link text-sm mb-2 inline-block"
           >
             &larr; {{ guild.name }}
