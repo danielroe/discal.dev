@@ -15,9 +15,18 @@ export default defineEventHandler(async (event) => {
     atprotoSessionValid = !!session
   }
 
+  const allEvents = await getGuildEvents(guildId)
+  const upcoming = allEvents
+    .filter(e => e.status === 1 || e.status === 2)
+    .sort((a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime())
+  const past = allEvents
+    .filter(e => e.status === 3 || e.status === 4)
+    .sort((a, b) => new Date(b.startTime).getTime() - new Date(a.startTime).getTime())
+
   return {
     guild,
-    events: await getGuildEvents(guildId),
+    events: upcoming,
+    pastEvents: past,
     atprotoSessionValid,
   }
 })

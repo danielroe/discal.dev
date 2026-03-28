@@ -3,6 +3,7 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     '@nuxtjs/html-validator',
     '@nuxt/fonts',
+    '@nuxtjs/color-mode',
     'nuxt-og-image',
     'nuxt-auth-utils',
     'reka-ui/nuxt',
@@ -17,6 +18,15 @@ export default defineNuxtConfig({
     head: {
       htmlAttrs: { lang: 'en' },
     },
+  },
+
+  css: [
+    '@unocss/reset/tailwind-compat.css',
+  ],
+
+  colorMode: {
+    classSuffix: '',
+    preference: 'dark',
   },
 
   runtimeConfig: {
@@ -47,6 +57,7 @@ export default defineNuxtConfig({
 
   experimental: {
     typedPages: true,
+    viewTransition: true,
   },
 
   compatibilityDate: '2024-04-03',

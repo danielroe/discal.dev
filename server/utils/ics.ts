@@ -23,7 +23,7 @@ export function generateCalendar(guild: StoredGuild, events: StoredEvent[]): str
   const calendar = icalGenerator(calendarData)
 
   for (const event of events) {
-    if (event.status === 3 || event.status === 4) continue
+    if (event.status === 4) continue
 
     const eventData: ICalEventData = {
       id: `discord-${event.id}@discal.dev`,

@@ -8,7 +8,7 @@ import type { StoredEvent, StoredGuild } from './types'
 const STATUS_MAP: Record<number, string> = {
   1: 'community.lexicon.calendar.event#scheduled',
   2: 'community.lexicon.calendar.event#scheduled',
-  3: 'community.lexicon.calendar.event#scheduled',
+  3: 'community.lexicon.calendar.event#completed',
   4: 'community.lexicon.calendar.event#cancelled',
 }
 

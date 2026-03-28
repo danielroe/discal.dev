@@ -88,13 +88,26 @@ async function syncGuildEvents(h3Event: Parameters<typeof publishEventToAtproto>
     if (!discordEventIds.has(storedId)) {
       const stored = await getEvent(guildId, storedId)
       if (stored && (stored.status === 1 || stored.status === 2)) {
-        stored.status = 4
+        const eventStarted = new Date(stored.startTime).getTime() <= Date.now()
+        stored.status = eventStarted ? 3 /* completed */ : 4 /* cancelled */
         stored.lastSyncedAt = now
         await setEvent(stored)
 
         if (guild.atprotoDid && stored.atprotoUri) {
           await publishEventToAtproto(h3Event, stored, guild)
         }
+      }
+    }
+  }
+
+  // Clean up events older than 90 days that are completed or canceled
+  const CLEANUP_AGE_MS = 90 * 24 * 60 * 60 * 1000
+  for (const storedId of storedEventIds) {
+    const stored = await getEvent(guildId, storedId)
+    if (stored && (stored.status === 3 || stored.status === 4)) {
+      const age = Date.now() - new Date(stored.startTime).getTime()
+      if (age > CLEANUP_AGE_MS) {
+        await removeEvent(guildId, storedId)
       }
     }
   }

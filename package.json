@@ -29,6 +29,7 @@
     "@atproto/oauth-client-node": "^0.3.17",
     "@nuxt/eslint": "^1.15.2",
     "@nuxt/fonts": "^0.14.0",
+    "@nuxtjs/color-mode": "^4.0.0",
     "@nuxtjs/html-validator": "^2.1.0",
     "@takumi-rs/core": "1.0.0-beta.20",
     "@touch4it/ical-timezones": "^1.9.0",
@@ -44,6 +45,7 @@
   "devDependencies": {
     "@nuxt/test-utils": "4.0.0",
     "@playwright/test": "1.58.2",
+    "@unocss/reset": "^66.6.7",
     "@upstash/redis": "^1.37.0",
     "@vite-pwa/assets-generator": "^1.0.2",
     "@vite-pwa/nuxt": "^1.1.1",
@@ -56,6 +58,7 @@
     "playwright-core": "^1.58.2",
     "simple-git-hooks": "2.13.1",
     "typescript": "6.0.2",
+    "unocss": "^66.6.7",
     "vitest": "^4.1.2",
     "vue-tsc": "3.2.6"
   },
