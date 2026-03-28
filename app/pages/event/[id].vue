@@ -31,7 +31,7 @@ const activeRsvpStatus = computed(() => {
   // The server returns raw AT Proto status like "community.lexicon.calendar.rsvp#going"
   // Extract just the status part
   const parts = serverStatus.split('#')
-  return parts[parts.length - 1] as 'going' | 'interested' | 'notgoing' | null
+  return rsvpStatusLabel[parts[parts.length - 1] as string] as 'going' | 'interested' | 'notgoing' | null
 })
 
 const rsvpStatusLabel: Record<string, string> = {

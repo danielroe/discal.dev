@@ -6,7 +6,15 @@ const { data, refresh, status } = useLazyFetch(`/api/guilds/${route.params.guild
 
 const guild = computed(() => data.value?.guild)
 const events = computed(() => data.value?.events ?? [])
+const pastEvents = computed(() => data.value?.pastEvents ?? [])
 const atprotoSessionValid = computed(() => data.value?.atprotoSessionValid ?? false)
+
+const showPastEvents = ref(false)
+
+const EVENT_STATUS_LABEL: Record<number, string> = {
+  3: 'completed',
+  4: 'canceled',
+}
 
 const calendarUrl = computed(() => {
   if (!guild.value) return ''
@@ -290,15 +298,15 @@ async function disconnectAtproto() {
           </div>
         </AppCard>
 
-        <!-- Events -->
+        <!-- Upcoming events -->
         <section>
           <h2 class="heading-2 mb-4">
-            events
+            upcoming events
             <span class="text-ink-muted font-400 text-lg">({{ events.length }})</span>
           </h2>
           <EmptyState
             v-if="events.length === 0"
-            title="No events synced yet"
+            title="no events synced yet"
             description="Events will appear after the next sync cycle (up to 5 minutes)."
             :show-mascot="false"
           />
@@ -330,6 +338,66 @@ async function disconnectAtproto() {
                       v-if="ev.location"
                       class="text-small truncate"
                     >{{ ev.location }}</span>
+                  </div>
+                </div>
+                <svg
+                  class="size-5 text-ink-muted shrink-0 group-hover/card:text-primary transition-colors"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                ><path
+                  fill-rule="evenodd"
+                  d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+                  clip-rule="evenodd"
+                /></svg>
+              </div>
+            </NuxtLink>
+          </div>
+        </section>
+
+        <!-- Past events -->
+        <section v-if="pastEvents.length > 0">
+          <button
+            type="button"
+            class="flex items-center gap-2 heading-2 mb-4 cursor-pointer select-none"
+            @click="showPastEvents = !showPastEvents"
+          >
+            <svg
+              class="size-5 text-ink-muted transition-transform duration-200"
+              :class="showPastEvents ? 'rotate-90' : ''"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            ><path
+              fill-rule="evenodd"
+              d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+              clip-rule="evenodd"
+            /></svg>
+            past events
+            <span class="text-ink-muted font-400 text-lg">({{ pastEvents.length }})</span>
+          </button>
+          <div
+            v-if="showPastEvents"
+            class="space-y-3"
+          >
+            <NuxtLink
+              v-for="ev in pastEvents"
+              :key="ev.id"
+              :to="`/event/${ev.id}`"
+              class="card-interactive p-5 block no-underline opacity-70"
+            >
+              <div class="flex items-center justify-between gap-3">
+                <div class="min-w-0">
+                  <strong class="text-ink font-600">{{ ev.name }}</strong>
+                  <div class="flex flex-wrap items-center gap-2 mt-1">
+                    <NuxtTime
+                      :datetime="ev.startTime"
+                      date-style="medium"
+                      time-style="short"
+                      class="text-small"
+                    />
+                    <span
+                      v-if="EVENT_STATUS_LABEL[ev.status]"
+                      :class="ev.status === 3 ? 'badge-success' : 'badge-primary'"
+                    >{{ EVENT_STATUS_LABEL[ev.status] }}</span>
                   </div>
                 </div>
                 <svg
