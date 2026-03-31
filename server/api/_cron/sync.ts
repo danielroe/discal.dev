@@ -27,6 +27,15 @@ async function syncGuildEvents(h3Event: Parameters<typeof publishEventToAtproto>
   const guild = await getGuild(guildId)
   if (!guild) return 0
 
+  if (guild.atprotoDid) {
+    try {
+      await getAtprotoAgent(h3Event, guild.atprotoDid)
+    }
+    catch {
+      // Session is invalid — will be handled when publishing
+    }
+  }
+
   let published = 0
   const discordEvents = await fetchGuildEvents(guildId)
   const storedEventIndex = await getEventIndex(guildId)
