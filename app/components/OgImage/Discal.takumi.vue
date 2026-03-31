@@ -389,8 +389,11 @@
         </div>
 
         <!-- Description -->
-        <div style="font-size: 26px; color: #a1a1aa; line-height: 1.4;">
-          your Discord events, everywhere. subscribe once, sync to any calendar app &ndash; or the atmosphere.
+        <div style="font-size: 26px; color: #a1a1aa; line-height: 1;">
+          your Discord events, everywhere.
+        </div>
+        <div style="font-size: 26px; color: #a1a1aa; line-height: 1;">
+          sync to any calendar app &ndash; or the atmosphere.
         </div>
 
         <!-- URL hint -->

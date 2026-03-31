@@ -38,7 +38,7 @@ const { loggedIn } = useUserSession()
         class="text-lg text-text-muted max-w-md animate-reveal"
         style="--reveal-delay: 0.2s"
       >
-        your Discord events, everywhere. subscribe once, sync to any calendar app &ndash; or the atmosphere.
+        your Discord events, everywhere. <br>sync to any calendar app &ndash; or the atmosphere.
       </p>
       <div
         class="animate-reveal"
