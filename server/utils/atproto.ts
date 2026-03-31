@@ -60,6 +60,44 @@ const _locks = new Map<string, Promise<unknown>>()
 let _client: NodeOAuthClient | null = null
 let _clientHost: string | null = null
 
+async function distributedLock<T>(key: string, fn: () => T | PromiseLike<T>): Promise<T> {
+  const lockKey = `lock:${key}`
+  const lockId = Math.random().toString(36).slice(2)
+  const kv = useStorage('kv')
+
+  // In-memory lock for same-process concurrency
+  while (_locks.has(key)) await _locks.get(key)
+
+  // KV-based distributed lock with TTL (auto-expires after 30s to prevent deadlocks)
+  const maxAttempts = 10
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
+    const existing = await kv.getItem(lockKey)
+    if (!existing) {
+      await kv.setItem(lockKey, lockId, { ttl: 30 })
+      // Verify we got the lock (simple check-and-set)
+      const held = await kv.getItem(lockKey)
+      if (held === lockId) break
+    }
+    // Wait and retry
+    await new Promise(resolve => setTimeout(resolve, 200 + Math.random() * 300))
+    if (attempt === maxAttempts - 1) {
+      // Force acquire after timeout (previous lock likely stale)
+      await kv.setItem(lockKey, lockId, { ttl: 30 })
+    }
+  }
+
+  const promise = Promise.resolve(fn()).finally(async () => {
+    _locks.delete(key)
+    // Only release if we still hold the lock
+    const held = await kv.getItem(lockKey)
+    if (held === lockId) {
+      await kv.removeItem(lockKey)
+    }
+  })
+  _locks.set(key, promise)
+  return promise
+}
+
 export function getAtprotoClient(event: H3Event): NodeOAuthClient {
   const host = getRequestURL(event).host
   if (_client && _clientHost === host) return _client
@@ -67,12 +105,7 @@ export function getAtprotoClient(event: H3Event): NodeOAuthClient {
     clientMetadata: getAtprotoClientMetadata(event, 'bluesky'),
     sessionStore: kvSessionStore(),
     stateStore: kvStateStore(),
-    requestLock: async <T>(key: string, fn: () => T | PromiseLike<T>): Promise<T> => {
-      while (_locks.has(key)) await _locks.get(key)
-      const promise = Promise.resolve(fn()).finally(() => _locks.delete(key))
-      _locks.set(key, promise)
-      return promise
-    },
+    requestLock: distributedLock,
   })
   _clientHost = host
   return _client
@@ -85,10 +118,15 @@ export async function getAtprotoAgent(event: H3Event, did: string): Promise<Agen
     return new Agent(session)
   }
   catch (error) {
-    // If the session is invalid (wrong client, expired refresh token, etc.),
-    // clear it so the user can re-authenticate
     const message = String(error)
-    if (message.includes('not issued to this client') || message.includes('deleted by another process')) {
+    // Only delete the session for truly unrecoverable errors.
+    const unrecoverable = [
+      'not issued to this client',
+      'deleted by another process',
+      'invalid_grant', // Refresh token was revoked by the user
+      'unauthorized_client',
+    ]
+    if (unrecoverable.some(msg => message.includes(msg))) {
       await useStorage('kv').removeItem(`atproto:session:${did}`)
     }
     throw error
