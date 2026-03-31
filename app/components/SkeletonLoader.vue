@@ -12,7 +12,7 @@ withDefaults(defineProps<{
 const variantClass: Record<string, string> = {
   text: 'h-4 rounded',
   heading: 'h-8 w-48 rounded-lg',
-  card: 'h-32 rounded-xl',
+  card: 'h-32 rounded-xl skeleton-card skeleton-sparkles',
   circle: 'rounded-full',
   custom: 'rounded',
 }
@@ -38,8 +38,11 @@ const variantClass: Record<string, string> = {
   </div>
   <div
     v-else
-    class="skeleton skeleton-shimmer"
-    :class="variantClass[variant]"
+    class="skeleton"
+    :class="[
+      variantClass[variant],
+      variant !== 'card' ? 'skeleton-shimmer' : '',
+    ]"
     :style="{ width, height }"
     role="presentation"
     aria-hidden="true"

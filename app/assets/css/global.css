@@ -251,6 +251,104 @@ body {
   100% { transform: translateX(100%); }
 }
 
+/* Rotating conic gradient for skeleton card borders */
+@keyframes border-rotate {
+  0% { --border-angle: 0deg; }
+  100% { --border-angle: 360deg; }
+}
+
+/* Sparkle dots that twinkle over skeleton content */
+@keyframes skeleton-sparkle {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/*
+ * Skeleton card with animated gradient border.
+ * Uses @property for smooth conic-gradient rotation.
+ * Fallback: simple border color pulse for browsers without @property.
+ */
+@property --border-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.skeleton-card {
+  position: relative;
+  border-color: transparent;
+  background:
+    linear-gradient(rgb(var(--c-card-bg)), rgb(var(--c-card-bg))) padding-box,
+    conic-gradient(
+      from var(--border-angle, 0deg),
+      rgb(var(--c-primary) / 0.4) 0%,
+      rgb(var(--c-accent) / 0.3) 33%,
+      rgb(var(--c-pop) / 0.3) 66%,
+      rgb(var(--c-primary) / 0.4) 100%
+    ) border-box;
+  border: 1px solid transparent;
+  animation: border-rotate 5s linear infinite;
+}
+
+/* Sparkle overlay inside skeleton cards */
+.skeleton-sparkles {
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-sparkles::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(circle 1px, rgb(var(--c-primary) / 0.3) 0%, transparent 100%),
+    radial-gradient(circle 1px, rgb(var(--c-accent) / 0.25) 0%, transparent 100%),
+    radial-gradient(circle 1px, rgb(var(--c-pop) / 0.25) 0%, transparent 100%);
+  background-size: 2px 2px;
+  background-position:
+    15% 25%,
+    65% 50%,
+    40% 75%;
+  background-repeat: no-repeat;
+  animation: skeleton-sparkle 3s ease-in-out infinite;
+}
+
+.skeleton-sparkles::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background-image:
+    radial-gradient(circle 1px, rgb(var(--c-accent) / 0.25) 0%, transparent 100%),
+    radial-gradient(circle 1px, rgb(var(--c-primary) / 0.2) 0%, transparent 100%);
+  background-size: 2px 2px;
+  background-position:
+    80% 30%,
+    25% 65%;
+  background-repeat: no-repeat;
+  animation: skeleton-sparkle 3s ease-in-out 1.5s infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-card {
+    animation: none;
+    border-color: rgb(var(--c-border));
+  }
+  .skeleton-sparkles::after,
+  .skeleton-sparkles::before {
+    animation: none;
+    opacity: 0;
+  }
+}
+
 @keyframes sparkle-pulse {
   0%, 100% {
     opacity: 0.4;

@@ -15,9 +15,9 @@ withDefaults(defineProps<{
       size="lg"
       class="motion-safe:animate-float"
     />
-    <h3 class="heading-3 text-text-muted">
+    <h2 class="heading-3 text-text-muted">
       {{ title }}
-    </h3>
+    </h2>
     <p
       v-if="description"
       class="text-sm text-text-muted max-w-sm"

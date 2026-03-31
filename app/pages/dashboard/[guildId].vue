@@ -4,7 +4,7 @@ definePageMeta({ middleware: 'auth' })
 const route = useRoute('dashboard-guildId')
 const config = useRuntimeConfig()
 
-const { data, refresh, status } = await useFetch(`/api/guilds/${route.params.guildId}` as '/api/guilds/:guildId')
+const { data, refresh, status } = useLazyFetch(`/api/guilds/${route.params.guildId}` as '/api/guilds/:guildId')
 
 const guild = computed(() => data.value?.guild)
 const events = computed(() => data.value?.events ?? [])
@@ -130,14 +130,38 @@ async function disconnectAtproto() {
   <div>
     <!-- Loading -->
     <template v-if="status === 'pending'">
+      <div class="mb-8">
+        <div class="flex items-center gap-4">
+          <div
+            class="skeleton skeleton-card w-14 h-14 rounded-xl"
+            :style="{ viewTransitionName: `guild-icon-${route.params.guildId}` }"
+          />
+          <div
+            class="skeleton skeleton-card h-8 w-48 rounded-lg"
+            :style="{ viewTransitionName: `guild-name-${route.params.guildId}` }"
+          />
+        </div>
+      </div>
       <div class="flex flex-col gap-6">
-        <SkeletonLoader variant="heading" />
-        <SkeletonLoader variant="card" />
-        <SkeletonLoader variant="card" />
-        <SkeletonLoader
-          variant="text"
-          :lines="3"
-        />
+        <!-- Calendar feed skeleton -->
+        <div class="skeleton-card skeleton-sparkles rounded-xl p-5">
+          <div class="skeleton h-5 w-32 rounded mb-3" />
+          <div class="skeleton h-4 w-64 rounded mb-3" />
+          <div class="skeleton h-10 rounded-lg w-full mb-4" />
+          <div class="skeleton h-9 w-44 rounded-full" />
+        </div>
+        <!-- Settings skeleton -->
+        <div class="skeleton-card skeleton-sparkles rounded-xl p-5">
+          <div class="skeleton h-5 w-24 rounded mb-3" />
+          <div class="skeleton h-4 w-48 rounded mb-2" />
+          <div class="skeleton h-10 rounded-lg w-full" />
+        </div>
+        <!-- Atproto skeleton -->
+        <div class="skeleton-card skeleton-sparkles rounded-xl p-5">
+          <div class="skeleton h-5 w-20 rounded mb-3" />
+          <div class="skeleton h-4 w-72 rounded mb-3" />
+          <div class="skeleton h-9 w-36 rounded-full" />
+        </div>
       </div>
     </template>
 

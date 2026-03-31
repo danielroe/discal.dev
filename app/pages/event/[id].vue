@@ -2,8 +2,8 @@
 const route = useRoute('event-id')
 const { loggedIn, user } = useUserSession()
 
-const { data: eventData } = await useFetch(`/api/events/${route.params.id}` as '/api/events/:id')
-const { data: rsvpData, refresh: refreshRsvps } = await useLazyFetch(`/api/events/${route.params.id}/rsvps` as '/api/events/:id/rsvps')
+const { data: eventData, status: eventStatus } = useLazyFetch(`/api/events/${route.params.id}` as '/api/events/:id')
+const { data: rsvpData, refresh: refreshRsvps } = useLazyFetch(`/api/events/${route.params.id}/rsvps` as '/api/events/:id/rsvps')
 
 const event = computed(() => eventData.value?.event)
 const guild = computed(() => eventData.value?.guild)
@@ -76,7 +76,33 @@ function loginAtproto() {
 
 <template>
   <div>
-    <template v-if="event && guild">
+    <!-- Loading -->
+    <template v-if="eventStatus === 'pending'">
+      <div class="mb-8">
+        <div class="skeleton skeleton-card h-4 w-28 rounded mb-4" />
+        <div class="skeleton skeleton-card h-8 w-64 rounded-lg mb-6" />
+        <div class="grid sm:grid-cols-2 gap-3">
+          <div class="skeleton-card skeleton-sparkles rounded-xl p-3">
+            <div class="skeleton h-3 w-12 rounded mb-2" />
+            <div class="skeleton h-4 w-40 rounded" />
+          </div>
+          <div class="skeleton-card skeleton-sparkles rounded-xl p-3">
+            <div class="skeleton h-3 w-16 rounded mb-2" />
+            <div class="skeleton h-4 w-24 rounded" />
+          </div>
+        </div>
+      </div>
+      <div class="skeleton-card skeleton-sparkles rounded-xl p-5 mb-6">
+        <div class="skeleton h-5 w-28 rounded mb-3" />
+        <div class="flex flex-col gap-2">
+          <div class="skeleton h-4 w-full rounded" />
+          <div class="skeleton h-4 w-full rounded" />
+          <div class="skeleton h-4 w-3/4 rounded" />
+        </div>
+      </div>
+    </template>
+
+    <template v-else-if="event && guild">
       <article>
         <!-- Header -->
         <div class="mb-8">

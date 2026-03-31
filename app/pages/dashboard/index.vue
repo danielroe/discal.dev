@@ -4,17 +4,12 @@ definePageMeta({ middleware: 'auth' })
 const { loggedIn } = useUserSession()
 const config = useRuntimeConfig()
 
-const [
-  { data: guilds, status: guildsStatus, error, refresh: refreshGuilds },
-  { data: available, status: availableStatus, refresh: refreshAvailable },
-] = await Promise.all([
-  useLazyFetch('/api/guilds', {
-    getCachedData: (key, nuxtApp) => nuxtApp.payload.data[key] ?? nuxtApp.static.data[key],
-  }),
-  useLazyFetch('/api/guilds/available', {
-    getCachedData: (key, nuxtApp) => nuxtApp.payload.data[key] ?? nuxtApp.static.data[key],
-  }),
-])
+const { data: guilds, status: guildsStatus, error, refresh: refreshGuilds } = useLazyFetch('/api/guilds', {
+  getCachedData: (key, nuxtApp) => nuxtApp.payload.data[key] ?? nuxtApp.static.data[key],
+})
+const { data: available, status: availableStatus, refresh: refreshAvailable } = useLazyFetch('/api/guilds/available', {
+  getCachedData: (key, nuxtApp) => nuxtApp.payload.data[key] ?? nuxtApp.static.data[key],
+})
 
 const loading = computed(() => guildsStatus.value === 'pending' || availableStatus.value === 'pending')
 const refreshing = ref(false)
@@ -97,29 +92,25 @@ async function registerGuild(guildId: string, guildName: string, guildIcon: stri
     <!-- Loading skeletons -->
     <template v-else-if="loading">
       <div class="flex flex-col gap-4">
-        <SkeletonLoader variant="heading" />
+        <div class="skeleton skeleton-card skeleton-sparkles rounded-lg w-36 h-7" />
         <div class="flex flex-col gap-3">
           <div
-            v-for="i in 4"
+            v-for="i in 3"
             :key="i"
-            class="card p-4 flex items-center gap-3"
+            class="skeleton-card skeleton-sparkles rounded-xl p-4"
           >
-            <SkeletonLoader
-              variant="circle"
-              width="40px"
-              height="40px"
-            />
-            <div class="flex flex-col gap-2 flex-1">
-              <SkeletonLoader
-                variant="custom"
-                :width="i % 2 === 0 ? '60%' : '45%'"
-                height="16px"
-              />
-              <SkeletonLoader
-                variant="custom"
-                width="30%"
-                height="12px"
-              />
+            <div class="flex items-center justify-between">
+              <div class="flex flex-col gap-1.5">
+                <div class="flex items-center gap-3">
+                  <div class="skeleton rounded-full w-10 h-10 shrink-0" />
+                  <div
+                    class="skeleton rounded h-4"
+                    :style="{ width: [120, 90, 150][i % 3] + 'px' }"
+                  />
+                </div>
+                <div class="skeleton rounded h-3 w-44 ml-[52px]" />
+              </div>
+              <div class="skeleton w-5 h-5 rounded shrink-0" />
             </div>
           </div>
         </div>
