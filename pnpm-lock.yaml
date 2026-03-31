@@ -65,7 +65,7 @@ importers:
         version: 3.5.31(typescript@6.0.2)
     devDependencies:
       '@iconify-json/heroicons':
-        specifier: ^1.2.3
+        specifier: 1.2.3
         version: 1.2.3
       '@nuxt/eslint-plugin':
         specifier: ^1.15.2
@@ -80,19 +80,19 @@ importers:
         specifier: ^5.10.0
         version: 5.10.0(eslint@9.39.4(jiti@2.6.1))
       '@unocss/preset-icons':
-        specifier: ^66.6.7
+        specifier: 66.6.7
         version: 66.6.7
       '@unocss/reset':
-        specifier: ^66.6.7
+        specifier: 66.6.7
         version: 66.6.7
       '@upstash/redis':
-        specifier: ^1.37.0
+        specifier: 1.37.0
         version: 1.37.0
       '@vite-pwa/assets-generator':
-        specifier: ^1.0.2
+        specifier: 1.0.2
         version: 1.0.2
       '@vite-pwa/nuxt':
-        specifier: ^1.1.1
+        specifier: 1.1.1
         version: 1.1.1(@vite-pwa/assets-generator@1.0.2)(magicast@0.5.2)(vite@7.3.1(@types/node@25.0.10)(jiti@2.6.1)(lightningcss@1.32.0)(terser@5.46.0)(yaml@2.8.2))(workbox-build@7.4.0)(workbox-window@7.4.0)
       '@vitest/coverage-v8':
         specifier: ^4.1.2
@@ -104,13 +104,13 @@ importers:
         specifier: 20.8.9
         version: 20.8.9
       playwright-core:
-        specifier: ^1.58.2
+        specifier: 1.58.2
         version: 1.58.2
       typescript:
         specifier: 6.0.2
         version: 6.0.2
       unocss:
-        specifier: ^66.6.7
+        specifier: 66.6.7
         version: 66.6.7(@unocss/webpack@66.6.7(webpack@5.105.4(esbuild@0.27.2)))(vite@7.3.1(@types/node@25.0.10)(jiti@2.6.1)(lightningcss@1.32.0)(terser@5.46.0)(yaml@2.8.2))
       vite-plus:
         specifier: 'catalog:'
