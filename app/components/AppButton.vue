@@ -2,6 +2,7 @@
 const props = withDefaults(defineProps<{
   variant?: 'primary' | 'secondary' | 'accent' | 'ghost' | 'danger'
   size?: 'sm' | 'md' | 'lg'
+  type?: 'button' | 'submit' | 'reset'
   loading?: boolean
   disabled?: boolean
   href?: string
@@ -9,6 +10,7 @@ const props = withDefaults(defineProps<{
 }>(), {
   variant: 'primary',
   size: 'md',
+  type: 'button',
   loading: false,
   disabled: false,
 })
@@ -60,7 +62,7 @@ const classes = computed(() => [
   </a>
   <button
     v-else
-    type="button"
+    :type="type"
     :class="classes"
     :disabled="disabled || loading"
   >

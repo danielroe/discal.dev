@@ -302,7 +302,10 @@ function loginAtproto() {
                   >
                     cancel
                   </AppButton>
-                  <AppButton variant="primary">
+                  <AppButton
+                    variant="primary"
+                    type="submit"
+                  >
                     sign in
                   </AppButton>
                 </div>

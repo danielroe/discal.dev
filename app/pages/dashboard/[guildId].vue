@@ -310,7 +310,10 @@ async function disconnectAtproto() {
                   >
                     cancel
                   </AppButton>
-                  <AppButton variant="primary">
+                  <AppButton
+                    variant="primary"
+                    type="submit"
+                  >
                     connect
                   </AppButton>
                 </div>
