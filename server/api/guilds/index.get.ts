@@ -1,9 +1,7 @@
 export default defineEventHandler(async (event) => {
-  const { user } = await requireUserSession(event)
-  if (!user.discordId) {
-    throw createError({ statusCode: 403, message: 'Discord login required' })
-  }
+  const manageable = await getUserManageableGuilds(event)
+  const manageableIds = new Set(manageable.map(g => g.id))
 
   const allGuilds = await getAllGuilds()
-  return allGuilds.filter(g => g.addedBy === user.discordId)
+  return allGuilds.filter(g => manageableIds.has(g.id))
 })

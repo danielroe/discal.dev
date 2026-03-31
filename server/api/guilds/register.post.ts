@@ -9,6 +9,13 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, message: 'Missing guildId' })
   }
 
+  // Verify the user has MANAGE_GUILD permission on this server
+  const manageable = await getUserManageableGuilds(event)
+  if (!manageable.some(g => g.id === body.guildId)) {
+    throw createError({ statusCode: 403, message: 'Not authorized to manage this server' })
+  }
+
+  // If already registered, return existing (any authorized admin can see it)
   const existing = await getGuild(body.guildId)
   if (existing) return existing
 

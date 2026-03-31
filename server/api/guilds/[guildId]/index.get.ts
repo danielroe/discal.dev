@@ -4,10 +4,7 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, message: 'Missing guild ID' })
   }
 
-  const guild = await getGuild(guildId)
-  if (!guild) {
-    throw createError({ statusCode: 404, message: 'Guild not found' })
-  }
+  const guild = await requireGuildAccess(event, guildId)
 
   let atprotoSessionValid = false
   if (guild.atprotoDid) {

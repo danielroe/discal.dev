@@ -1,4 +1,6 @@
 <script setup lang="ts">
+definePageMeta({ middleware: 'auth' })
+
 const { loggedIn } = useUserSession()
 const config = useRuntimeConfig()
 
