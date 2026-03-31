@@ -14,8 +14,6 @@ overrides:
   vite: npm:@voidzero-dev/vite-plus-core@latest
   vitest: npm:@voidzero-dev/vite-plus-test@latest
 
-packageExtensionsChecksum: sha256-xMspBmmfh8wz/eGJ2WHW8uu7EFN217/AVnvbxLUPcOg=
-
 importers:
 
   .:
@@ -29,6 +27,9 @@ importers:
       '@nuxt/fonts':
         specifier: ^0.14.0
         version: 0.14.0(@upstash/redis@1.37.0)(db0@0.3.4)(ioredis@5.9.2)(magicast@0.5.2)(vite@7.3.1(@types/node@25.0.10)(jiti@2.6.1)(lightningcss@1.32.0)(terser@5.46.0)(yaml@2.8.2))
+      '@nuxt/vite-builder':
+        specifier: ^4.4.2
+        version: 4.4.2(5bcb262f1d963dd8f96b4a2886edf54d)
       '@nuxtjs/color-mode':
         specifier: ^4.0.0
         version: 4.0.0(magicast@0.5.2)
