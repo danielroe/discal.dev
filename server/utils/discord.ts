@@ -44,6 +44,21 @@ export async function fetchGuildEvents(guildId: string): Promise<DiscordSchedule
   return events
 }
 
+export async function fetchGuildInfo(guildId: string): Promise<{ id: string, name: string, icon: string | null } | null> {
+  try {
+    const config = useRuntimeConfig()
+    return await discordFetch<{ id: string, name: string, icon: string | null }>(
+      `/guilds/${guildId}`,
+      {
+        headers: { Authorization: `Bot ${config.discordBotToken}` },
+      },
+    )
+  }
+  catch {
+    return null
+  }
+}
+
 export async function checkBotInGuild(guildId: string): Promise<boolean> {
   const cacheKey = `cache:bot-in-guild:${guildId}`
   const cached = await useStorage('kv').getItem<boolean>(cacheKey)

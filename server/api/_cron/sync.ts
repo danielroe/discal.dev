@@ -27,6 +27,23 @@ async function syncGuildEvents(h3Event: Parameters<typeof publishEventToAtproto>
   const guild = await getGuild(guildId)
   if (!guild) return 0
 
+  // Refresh guild name and icon from Discord
+  const guildInfo = await fetchGuildInfo(guildId)
+  if (guildInfo) {
+    let updated = false
+    if (guildInfo.name !== guild.name) {
+      guild.name = guildInfo.name
+      updated = true
+    }
+    if (guildInfo.icon !== guild.icon) {
+      guild.icon = guildInfo.icon
+      updated = true
+    }
+    if (updated) {
+      await setGuild(guild)
+    }
+  }
+
   if (guild.atprotoDid) {
     try {
       await getAtprotoAgent(h3Event, guild.atprotoDid)

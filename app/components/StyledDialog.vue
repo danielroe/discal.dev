@@ -25,7 +25,7 @@ const open = defineModel<boolean>('open', { default: false })
     </DialogTrigger>
     <DialogPortal>
       <DialogOverlay class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 motion-safe:animate-fade-in" />
-      <DialogContent class="fixed left-1/2 top-1/2 z-50 bg-surface border border-border rounded-2xl shadow-2xl p-6 w-full max-w-md motion-safe:animate-slide-up">
+      <DialogContent class="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 bg-surface border border-border rounded-2xl shadow-2xl p-6 w-[calc(100%-2rem)] max-w-md motion-safe:animate-fade-in">
         <div class="flex items-start justify-between gap-4 mb-4">
           <div>
             <DialogTitle class="heading-3">

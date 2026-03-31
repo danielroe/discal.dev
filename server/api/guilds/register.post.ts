@@ -4,7 +4,7 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 403, message: 'Discord login required' })
   }
 
-  const body = await readBody<{ guildId: string, guildName?: string }>(event)
+  const body = await readBody<{ guildId: string, guildName?: string, guildIcon?: string | null }>(event)
   if (!body.guildId) {
     throw createError({ statusCode: 400, message: 'Missing guildId' })
   }
@@ -22,7 +22,7 @@ export default defineEventHandler(async (event) => {
   const guild: StoredGuild = {
     id: body.guildId,
     name: body.guildName || `Guild ${body.guildId}`,
-    icon: null,
+    icon: body.guildIcon ?? null,
     addedBy: user.discordId,
     atprotoDid: null,
     timezone: 'UTC',

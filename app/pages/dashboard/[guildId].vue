@@ -57,11 +57,6 @@ async function saveTimezone() {
 const atprotoHandle = ref('')
 const atprotoDialogOpen = ref(false)
 
-function connectAtproto() {
-  if (!atprotoHandle.value) return
-  navigateTo(`/auth/bluesky?handle=${encodeURIComponent(atprotoHandle.value)}&guild=${route.params.guildId}`, { external: true })
-}
-
 // Resolve atproto profile for connected DID
 const atprotoProfile = ref<{ handle?: string, displayName?: string, avatar?: string } | null>(null)
 watch(() => guild.value?.atprotoDid, async (did) => {
@@ -79,6 +74,18 @@ watch(() => guild.value?.atprotoDid, async (did) => {
     atprotoProfile.value = null
   }
 }, { immediate: true })
+
+// Prefill handle from previously connected profile
+watch(() => atprotoProfile.value?.handle, (handle) => {
+  if (handle && !atprotoHandle.value) {
+    atprotoHandle.value = handle
+  }
+}, { immediate: true })
+
+function connectAtproto() {
+  if (!atprotoHandle.value) return
+  navigateTo(`/auth/bluesky?handle=${encodeURIComponent(atprotoHandle.value)}&guild=${route.params.guildId}`, { external: true })
+}
 
 const removing = ref(false)
 const removeError = ref('')

@@ -153,7 +153,7 @@ export default defineConfig({
 
     /* ——— Skeleton ——— */
     'skeleton': 'bg-surface-raised rounded relative overflow-hidden',
-    'skeleton-shimmer': 'after:absolute after:inset-0 after:bg-gradient-to-r after:from-transparent after:via-white/10 after:to-transparent after:animate-shimmer',
+    'skeleton-shimmer': 'after:absolute after:inset-0 after:bg-gradient-to-r after:from-transparent after:via-primary/10 after:to-transparent after:animate-shimmer',
 
     /* ——— Links ——— */
     'link-accent': 'text-accent hover:text-accent-hover transition-colors underline underline-offset-2 decoration-accent/30 hover:decoration-accent',

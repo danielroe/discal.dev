@@ -40,14 +40,14 @@ const withoutBot = computed(() =>
 const registering = ref<string | null>(null)
 const registerError = ref('')
 
-async function registerGuild(guildId: string, guildName: string) {
+async function registerGuild(guildId: string, guildName: string, guildIcon: string | null) {
   registering.value = guildId
   registerError.value = ''
 
   try {
     const result = await $fetch('/api/guilds/register', {
       method: 'POST',
-      body: { guildId, guildName },
+      body: { guildId, guildName, guildIcon },
     })
     await navigateTo(`/dashboard/${result.id}`)
   }
@@ -97,11 +97,29 @@ async function registerGuild(guildId: string, guildName: string) {
       <div class="flex flex-col gap-4">
         <SkeletonLoader variant="heading" />
         <div class="flex flex-col gap-3">
-          <SkeletonLoader
+          <div
             v-for="i in 4"
             :key="i"
-            variant="card"
-          />
+            class="card p-4 flex items-center gap-3"
+          >
+            <SkeletonLoader
+              variant="circle"
+              width="40px"
+              height="40px"
+            />
+            <div class="flex flex-col gap-2 flex-1">
+              <SkeletonLoader
+                variant="custom"
+                :width="i % 2 === 0 ? '60%' : '45%'"
+                height="16px"
+              />
+              <SkeletonLoader
+                variant="custom"
+                width="30%"
+                height="12px"
+              />
+            </div>
+          </div>
         </div>
       </div>
     </template>
@@ -194,7 +212,7 @@ async function registerGuild(guildId: string, guildName: string) {
                 size="sm"
                 :loading="registering === guild.id"
                 :disabled="registering === guild.id"
-                @click="registerGuild(guild.id, guild.name)"
+                @click="registerGuild(guild.id, guild.name, guild.icon)"
               >
                 enable
               </AppButton>
