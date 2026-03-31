@@ -15,28 +15,24 @@ jobs:
 
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
-      - run: corepack enable
-      - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
-        with:
-          node-version: lts/*
-          cache: 'pnpm'
+      - uses: voidzero-dev/setup-vp@e34774bccb4e7d7f2e23514ca980177a71425e43 # v1
 
       - name: 📦 Install dependencies
-        run: pnpm install
+        run: vp install
 
       - name: 📦 Install browsers
-        run: pnpm playwright install
+        run: vp exec playwright install
 
       - name: 🔠 Fix lint errors
-        run: pnpm lint --fix
+        run: vp lint . --fix
 
       - name: 🧪 Update unit test snapshots
-        run: pnpm test:unit -u
+        run: vp run test:unit -- -u
 
       - name: 🏃 Update component test snapshots
-        run: pnpm test:nuxt -u
+        run: vp run test:nuxt -- -u
 
       - name: 🖥️ Update browser test snapshots
-        run: pnpm test:browser --update-snapshots
+        run: vp run test:browser -- --update-snapshots
 
       - uses: autofix-ci/action@635ffb0c9798bd160680f18fd73371e355b85f27 # 635ffb0c9798bd160680f18fd73371e355b85f27

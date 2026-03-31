@@ -4,14 +4,14 @@ export default defineEventHandler(async (event) => {
 
   // Step 1: No code = initial request, start the OAuth flow
   if (!query.code) {
-    const handle = query.handle?.toString()
+    const handle = typeof query.handle === 'string' ? query.handle : undefined
     if (!handle) {
       throw createError({ statusCode: 400, message: 'Missing handle parameter' })
     }
 
     // Stash the guild ID in a cookie before redirecting
-    if (query.guild) {
-      setCookie(event, 'oauth-bluesky-guild', String(query.guild), {
+    if (query.guild && typeof query.guild === 'string') {
+      setCookie(event, 'oauth-bluesky-guild', query.guild, {
         httpOnly: true,
         secure: !import.meta.dev,
         sameSite: 'lax',

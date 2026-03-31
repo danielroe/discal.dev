@@ -1,6 +1,5 @@
 export default defineNuxtConfig({
   modules: [
-    '@nuxt/eslint',
     '@nuxtjs/html-validator',
     '@nuxt/fonts',
     '@nuxtjs/color-mode',
@@ -56,13 +55,15 @@ export default defineNuxtConfig({
     '/_og/s/c_Discal.png': { prerender: true },
   },
 
-  future: {
-    compatibilityVersion: 4,
-  },
-
   experimental: {
     typedPages: true,
     viewTransition: true,
+  },
+
+  typescript: {
+    nodeTsConfig: {
+      include: ['../vite.config.ts']
+    }
   },
 
   compatibilityDate: '2024-04-03',
@@ -102,12 +103,6 @@ export default defineNuxtConfig({
 
   auth: {
     atproto: true,
-  },
-
-  eslint: {
-    config: {
-      stylistic: true,
-    },
   },
 
   htmlValidator: {
