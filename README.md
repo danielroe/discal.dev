@@ -1,75 +1,86 @@
-# Nuxt 3 Minimal Starter
+# discal.dev
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+> Your Discord events, everywhere.
+
+discal.dev is a free and open-source web app that bridges Discord server events to standard calendar apps and the decentralized atproto ecosystem.
+
+Subscribe to any registered server's events in Google Calendar, Apple Calendar, Outlook, or any ICS-compatible app -- and optionally publish them to the atmosphere.
+
+- 👉 [Check it out](https://discal.dev/)
+- ➕ [Add the bot to your server](https://discal.dev/dashboard)
+
+## Features
+
+- **auto-updating calendar feeds** -- Each registered server gets a subscribable `.ics` feed that stays in sync with Discord events, updated every 5 minutes.
+- **atproto integration** -- Optionally connect a Bluesky account to publish events as [`community.lexicon.calendar.event` records](https://github.com/lexicon-community). Events are viewable on [Smoke Signal](https://smokesignal.events) and other atproto calendar viewers.
+
+## Tech stack
+
+- [Nuxt 4](https://nuxt.com/) with [Nitro](https://nitro.build/)
+- [UnoCSS](https://unocss.dev/)
+- [Reka UI](https://reka-ui.com/)
+- [Upstash Redis](https://upstash.com/) for storage
+- [ical-generator](https://github.com/sebbo2002/ical-generator) for calendar feeds
+- [nuxt-og-image](https://github.com/nuxt-modules/og-image) for social previews
+- [Vite+](https://viteplus.dev/) for linting and testing
 
 ## Setup
 
-Make sure to install the dependencies:
-
 ```bash
-# npm
-npm install
-
-# pnpm
 pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
 ```
 
-## Development Server
+Copy `.env.example` to `.env` and fill in the required values (Discord bot token, OAuth credentials, Upstash Redis URL, etc.).
 
-Start the development server on `http://localhost:3000`:
+## Development
 
 ```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm run dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
+pnpm dev
 ```
 
-## Production
-
-Build the application for production:
+## Testing
 
 ```bash
-# npm
-npm run build
+# Unit tests
+pnpm test:unit
 
-# pnpm
-pnpm run build
+# Component tests (Nuxt environment + browser)
+pnpm test:nuxt
 
-# yarn
-yarn build
+# Browser tests (Playwright)
+pnpm test:browser
 
-# bun
-bun run build
+# All tests
+pnpm test
 ```
 
-Locally preview production build:
+## Linting
 
 ```bash
-# npm
-npm run preview
+# Check
+pnpm lint
 
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
+# Fix
+pnpm lint --fix
 ```
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+## Building
+
+```bash
+pnpm build
+```
+
+## Contributing
+
+We welcome contributions -- please feel free to explore the project and improve things.
+
+1. Fork the repository
+2. Create your branch (`git checkout -b my-change`)
+3. Make your changes
+4. Run `pnpm lint` and `pnpm test` to verify
+5. Commit and push
+6. Open a pull request
+
+## License
+
+Published under [MIT License](./LICENSE).
