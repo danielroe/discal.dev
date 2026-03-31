@@ -14,6 +14,8 @@ overrides:
   vite: npm:@voidzero-dev/vite-plus-core@latest
   vitest: npm:@voidzero-dev/vite-plus-test@latest
 
+packageExtensionsChecksum: sha256-xMspBmmfh8wz/eGJ2WHW8uu7EFN217/AVnvbxLUPcOg=
+
 importers:
 
   .:
