@@ -58,9 +58,11 @@ function kvStateStore(): NodeSavedStateStore {
 const _locks = new Map<string, Promise<unknown>>()
 
 let _client: NodeOAuthClient | null = null
+let _clientHost: string | null = null
 
 export function getAtprotoClient(event: H3Event): NodeOAuthClient {
-  if (_client) return _client
+  const host = getRequestURL(event).host
+  if (_client && _clientHost === host) return _client
   _client = new NodeOAuthClient({
     clientMetadata: getAtprotoClientMetadata(event, 'bluesky'),
     sessionStore: kvSessionStore(),
@@ -72,6 +74,7 @@ export function getAtprotoClient(event: H3Event): NodeOAuthClient {
       return promise
     },
   })
+  _clientHost = host
   return _client
 }
 
