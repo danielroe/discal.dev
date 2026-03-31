@@ -1,5 +1,5 @@
 <script setup lang="ts">
-withDefaults(defineProps<{
+const props = withDefaults(defineProps<{
   variant?: 'primary' | 'secondary' | 'accent' | 'ghost' | 'danger'
   size?: 'sm' | 'md' | 'lg'
   loading?: boolean
@@ -13,7 +13,7 @@ withDefaults(defineProps<{
   disabled: false,
 })
 
-const variantClasses: Record<string, string> = {
+const variantClass: Record<string, string> = {
   primary: 'btn-primary',
   secondary: 'btn-secondary',
   accent: 'btn-accent',
@@ -21,47 +21,52 @@ const variantClasses: Record<string, string> = {
   danger: 'btn-danger',
 }
 
-const sizeClasses: Record<string, string> = {
+const sizeClass: Record<string, string> = {
   sm: 'btn-sm',
-  md: '', // default size is baked into variant shortcuts
+  md: 'btn-md',
   lg: 'btn-lg',
 }
+
+const classes = computed(() => [
+  variantClass[props.variant],
+  sizeClass[props.size],
+])
 </script>
 
 <template>
   <NuxtLink
     v-if="to"
     :to="to"
-    :class="[variantClasses[variant], sizeClasses[size]]"
+    :class="classes"
     :aria-disabled="disabled || loading"
   >
     <span
       v-if="loading"
-      class="size-4 border-2 border-current border-t-transparent rounded-full animate-spin-slow"
+      class="loading-spinner"
     />
     <slot />
   </NuxtLink>
   <a
     v-else-if="href"
     :href="href"
-    :class="[variantClasses[variant], sizeClasses[size]]"
+    :class="classes"
     :aria-disabled="disabled || loading"
   >
     <span
       v-if="loading"
-      class="size-4 border-2 border-current border-t-transparent rounded-full animate-spin-slow"
+      class="loading-spinner"
     />
     <slot />
   </a>
   <button
     v-else
     type="button"
+    :class="classes"
     :disabled="disabled || loading"
-    :class="[variantClasses[variant], sizeClasses[size]]"
   >
     <span
       v-if="loading"
-      class="size-4 border-2 border-current border-t-transparent rounded-full animate-spin-slow"
+      class="loading-spinner"
     />
     <slot />
   </button>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-withDefaults(defineProps<{
+const props = withDefaults(defineProps<{
   interactive?: boolean
   highlight?: boolean
   padding?: 'sm' | 'md' | 'lg'
@@ -9,20 +9,21 @@ withDefaults(defineProps<{
   padding: 'md',
 })
 
-const paddingClasses: Record<string, string> = {
+const paddingClass: Record<string, string> = {
   sm: 'p-3',
   md: 'p-5',
-  lg: 'p-6 sm:p-8',
+  lg: 'p-8',
 }
+
+const classes = computed(() => [
+  props.highlight ? 'card-highlight' : 'card',
+  props.interactive ? 'hover:-translate-y-0.5 hover:shadow-lg hover:border-border-emphasis cursor-pointer' : '',
+  paddingClass[props.padding],
+])
 </script>
 
 <template>
-  <div
-    :class="[
-      interactive ? 'card-interactive' : highlight ? 'card-highlight' : 'card',
-      paddingClasses[padding],
-    ]"
-  >
+  <div :class="classes">
     <slot />
   </div>
 </template>

@@ -43,8 +43,10 @@
     "vue": "3.5.31"
   },
   "devDependencies": {
+    "@iconify-json/heroicons": "^1.2.3",
     "@nuxt/test-utils": "4.0.0",
     "@playwright/test": "1.58.2",
+    "@unocss/preset-icons": "^66.6.7",
     "@unocss/reset": "^66.6.7",
     "@upstash/redis": "^1.37.0",
     "@vite-pwa/assets-generator": "^1.0.2",

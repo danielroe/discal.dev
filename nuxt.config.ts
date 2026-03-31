@@ -21,7 +21,8 @@ export default defineNuxtConfig({
   },
 
   css: [
-    '@unocss/reset/tailwind-compat.css',
+    '@unocss/reset/tailwind.css',
+    '~/assets/css/global.css',
   ],
 
   colorMode: {
@@ -118,7 +119,7 @@ export default defineNuxtConfig({
       name: 'discal.dev',
       short_name: 'discal',
       description: 'Subscribe to Discord server events via ICS calendar feeds',
-      theme_color: '#7c3aed',
+      theme_color: '#ec4899',
       background_color: '#ffffff',
     },
     pwaAssets: {

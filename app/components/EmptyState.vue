@@ -9,24 +9,24 @@ withDefaults(defineProps<{
 </script>
 
 <template>
-  <div class="flex flex-col items-center justify-center py-12 text-center">
+  <div class="flex flex-col items-center justify-center text-center py-16 gap-4">
     <DiscalLogo
       v-if="showMascot"
       size="lg"
-      class="mb-6 opacity-60"
+      class="motion-safe:animate-float"
     />
-    <h3 class="heading-3 mb-2">
+    <h3 class="heading-3 text-text-muted">
       {{ title }}
     </h3>
     <p
       v-if="description"
-      class="text-body max-w-sm"
+      class="text-sm text-text-muted max-w-sm"
     >
       {{ description }}
     </p>
     <div
       v-if="$slots.action"
-      class="mt-6"
+      class="mt-2"
     >
       <slot name="action" />
     </div>

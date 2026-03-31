@@ -1,13 +1,13 @@
 <template>
   <div
-    style="display: flex; width: 1200px; height: 630px; position: relative; background: #0f0a1a; color: #f0eef5; font-family: 'Nunito', sans-serif;"
+    style="display: flex; width: 1200px; height: 630px; position: relative; background: #0a0a0f; color: #f5f5f5; font-family: 'Outfit', sans-serif;"
   >
     <!-- Background gradient blobs -->
     <div
-      style="position: absolute; top: -80px; right: -80px; width: 500px; height: 500px; border-radius: 9999px; background: radial-gradient(circle, rgba(139,92,246,0.25) 0%, transparent 70%);"
+      style="position: absolute; top: -80px; right: -80px; width: 500px; height: 500px; border-radius: 9999px; background: radial-gradient(circle, rgba(236,72,153,0.2) 0%, transparent 70%);"
     />
     <div
-      style="position: absolute; bottom: -60px; left: -60px; width: 400px; height: 400px; border-radius: 9999px; background: radial-gradient(circle, rgba(251,191,36,0.15) 0%, transparent 70%);"
+      style="position: absolute; bottom: -60px; left: -60px; width: 400px; height: 400px; border-radius: 9999px; background: radial-gradient(circle, rgba(6,182,212,0.15) 0%, transparent 70%);"
     />
 
     <!-- Grid pattern overlay -->
@@ -47,8 +47,8 @@
             cx="256"
             cy="272"
             r="186"
-            fill="#8888aa"
-            stroke="#555580"
+            fill="#9090aa"
+            stroke="#707088"
             stroke-width="4"
           />
           <!-- Lighter upper region (clipped) -->
@@ -57,7 +57,7 @@
             cy="210"
             rx="170"
             ry="130"
-            fill="#aaaacc"
+            fill="#b8b8d0"
             opacity="0.5"
             clip-path="url(#ball-clip)"
           />
@@ -66,7 +66,7 @@
             cy="180"
             rx="100"
             ry="80"
-            fill="#c0c0d4"
+            fill="#c8c8dd"
             opacity="0.35"
             clip-path="url(#ball-clip)"
           />
@@ -128,7 +128,7 @@
               width="38"
               height="30"
               rx="4"
-              fill="#ffffff"
+              fill="#e0e0ec"
               opacity="0.45"
               transform="rotate(-4 154 210)"
             />
@@ -138,7 +138,7 @@
               width="38"
               height="30"
               rx="4"
-              fill="#ffffff"
+              fill="#e0e0ec"
               opacity="0.5"
               transform="rotate(3 289 205)"
             />
@@ -148,7 +148,7 @@
               width="38"
               height="30"
               rx="4"
-              fill="#ffffff"
+              fill="#e0e0ec"
               opacity="0.35"
               transform="rotate(-2 209 295)"
             />
@@ -158,7 +158,7 @@
               width="30"
               height="24"
               rx="4"
-              fill="#ffffff"
+              fill="#e0e0ec"
               opacity="0.55"
             />
           </g>
@@ -166,15 +166,15 @@
           <!-- Party hat -->
           <polygon
             points="256,30 190,148 322,148"
-            fill="#8b5cf6"
-            stroke="#6d28d9"
+            fill="#ec4899"
+            stroke="#be185d"
             stroke-width="4"
             stroke-linejoin="round"
           />
           <path
             d="M 198 140 Q 256 156 314 140"
             fill="none"
-            stroke="#fbbf24"
+            stroke="#facc15"
             stroke-width="7"
             stroke-linecap="round"
           />
@@ -182,13 +182,13 @@
             cx="256"
             cy="30"
             r="18"
-            fill="#fbbf24"
+            fill="#facc15"
           />
           <circle
             cx="256"
             cy="30"
             r="11"
-            fill="#f59e0b"
+            fill="#eab308"
           />
 
           <!-- Eyes -->
@@ -197,8 +197,8 @@
             cy="262"
             rx="42"
             ry="46"
-            fill="#ffffff"
-            stroke="#555580"
+            fill="#d4d4e0"
+            stroke="#707088"
             stroke-width="3"
           />
           <ellipse
@@ -213,13 +213,13 @@
             cy="252"
             rx="10"
             ry="11"
-            fill="#ffffff"
+            fill="#d4d4e0"
           />
           <circle
             cx="206"
             cy="274"
             r="5"
-            fill="#ffffff"
+            fill="#d4d4e0"
             opacity="0.4"
           />
 
@@ -228,8 +228,8 @@
             cy="262"
             rx="42"
             ry="46"
-            fill="#ffffff"
-            stroke="#555580"
+            fill="#d4d4e0"
+            stroke="#707088"
             stroke-width="3"
           />
           <ellipse
@@ -244,13 +244,13 @@
             cy="252"
             rx="10"
             ry="11"
-            fill="#ffffff"
+            fill="#d4d4e0"
           />
           <circle
             cx="306"
             cy="274"
             r="5"
-            fill="#ffffff"
+            fill="#d4d4e0"
             opacity="0.4"
           />
 
@@ -258,7 +258,7 @@
           <path
             d="M 222 314 Q 256 346 290 314"
             fill="none"
-            stroke="#6d28d9"
+            stroke="#be185d"
             stroke-width="5"
             stroke-linecap="round"
           />
@@ -269,7 +269,7 @@
             cy="305"
             rx="20"
             ry="12"
-            fill="#f472b6"
+            fill="#fb7185"
             opacity="0.4"
           />
           <ellipse
@@ -277,7 +277,7 @@
             cy="305"
             rx="20"
             ry="12"
-            fill="#f472b6"
+            fill="#fb7185"
             opacity="0.4"
           />
 
@@ -288,7 +288,7 @@
               y1="-22"
               x2="0"
               y2="22"
-              stroke="#a78bfa"
+              stroke="#22d3ee"
               stroke-width="5"
               stroke-linecap="round"
             />
@@ -297,7 +297,7 @@
               y1="0"
               x2="22"
               y2="0"
-              stroke="#a78bfa"
+              stroke="#22d3ee"
               stroke-width="5"
               stroke-linecap="round"
             />
@@ -306,7 +306,7 @@
               y1="-13"
               x2="13"
               y2="13"
-              stroke="#a78bfa"
+              stroke="#22d3ee"
               stroke-width="3.5"
               stroke-linecap="round"
             />
@@ -315,7 +315,7 @@
               y1="-13"
               x2="-13"
               y2="13"
-              stroke="#a78bfa"
+              stroke="#22d3ee"
               stroke-width="3.5"
               stroke-linecap="round"
             />
@@ -326,7 +326,7 @@
               y1="-16"
               x2="0"
               y2="16"
-              stroke="#fbbf24"
+              stroke="#facc15"
               stroke-width="4.5"
               stroke-linecap="round"
             />
@@ -335,7 +335,7 @@
               y1="0"
               x2="16"
               y2="0"
-              stroke="#fbbf24"
+              stroke="#facc15"
               stroke-width="4.5"
               stroke-linecap="round"
             />
@@ -344,7 +344,7 @@
               y1="-10"
               x2="10"
               y2="10"
-              stroke="#fbbf24"
+              stroke="#facc15"
               stroke-width="3"
               stroke-linecap="round"
             />
@@ -353,7 +353,7 @@
               y1="-10"
               x2="-10"
               y2="10"
-              stroke="#fbbf24"
+              stroke="#facc15"
               stroke-width="3"
               stroke-linecap="round"
             />
@@ -364,7 +364,7 @@
               y1="-13"
               x2="0"
               y2="13"
-              stroke="#a78bfa"
+              stroke="#22d3ee"
               stroke-width="4"
               stroke-linecap="round"
             />
@@ -373,7 +373,7 @@
               y1="0"
               x2="13"
               y2="0"
-              stroke="#a78bfa"
+              stroke="#22d3ee"
               stroke-width="4"
               stroke-linecap="round"
             />
@@ -384,19 +384,19 @@
       <!-- Text content -->
       <div style="display: flex; flex-direction: column; justify-content: center; gap: 16px; flex: 1;">
         <!-- Title -->
-        <div style="font-size: 72px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; color: #a78bfa;">
+        <div style="font-size: 72px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; color: #f472b6;">
           discal.dev
         </div>
 
         <!-- Description -->
-        <div style="font-size: 26px; color: #9999bb; line-height: 1.4;">
-          Discord server events as calendar feeds. Sync to atproto.
+        <div style="font-size: 26px; color: #a1a1aa; line-height: 1.4;">
+          your Discord events, everywhere. subscribe once, sync to any calendar app &ndash; or the atmosphere.
         </div>
 
         <!-- URL hint -->
         <div style="display: flex; align-items: center; gap: 8px; margin-top: 8px;">
-          <div style="width: 8px; height: 8px; border-radius: 9999px; background: #22c55e;" />
-          <span style="font-size: 20px; color: #7777a0;">
+          <div style="width: 8px; height: 8px; border-radius: 9999px; background: #22d3ee;" />
+          <span style="font-size: 20px; color: #737373; font-family: 'Space Mono', monospace;">
             discal.dev
           </span>
         </div>

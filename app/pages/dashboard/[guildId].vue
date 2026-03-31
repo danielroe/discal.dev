@@ -2,7 +2,7 @@
 const route = useRoute('dashboard-guildId')
 const config = useRuntimeConfig()
 
-const { data, refresh, status } = useLazyFetch(`/api/guilds/${route.params.guildId}` as '/api/guilds/:guildId')
+const { data, refresh, status } = await useFetch(`/api/guilds/${route.params.guildId}` as '/api/guilds/:guildId')
 
 const guild = computed(() => data.value?.guild)
 const events = computed(() => data.value?.events ?? [])
@@ -28,7 +28,6 @@ const webcalUrl = computed(() => {
   return url.toString()
 })
 
-const timezones = Intl.supportedValuesOf('timeZone')
 const selectedTimezone = ref('UTC')
 
 watch(() => guild.value?.timezone, (tz) => {
@@ -81,6 +80,25 @@ watch(() => guild.value?.atprotoDid, async (did) => {
   }
 }, { immediate: true })
 
+const removing = ref(false)
+const removeError = ref('')
+const confirmRemoveOpen = ref(false)
+
+async function removeServer() {
+  removing.value = true
+  removeError.value = ''
+  try {
+    await $fetch(`/api/guilds/${route.params.guildId}`, {
+      method: 'DELETE',
+    })
+    await navigateTo('/dashboard')
+  }
+  catch (error) {
+    removeError.value = error instanceof Error ? error.message : 'failed to remove server'
+    removing.value = false
+  }
+}
+
 const disconnecting = ref(false)
 async function disconnectAtproto() {
   disconnecting.value = true
@@ -100,10 +118,10 @@ async function disconnectAtproto() {
 </script>
 
 <template>
-  <div class="page-container">
+  <div>
     <!-- Loading -->
     <template v-if="status === 'pending'">
-      <div class="space-y-6">
+      <div class="flex flex-col gap-6">
         <SkeletonLoader variant="heading" />
         <SkeletonLoader variant="card" />
         <SkeletonLoader variant="card" />
@@ -119,47 +137,47 @@ async function disconnectAtproto() {
       <div class="mb-8">
         <NuxtLink
           to="/dashboard"
-          class="link text-sm mb-2 inline-block"
+          class="link-accent font-mono text-sm inline-flex items-center gap-1 mb-4 group no-underline"
         >
-          &larr; Back to dashboard
+          <span class="transition-transform group-hover:-translate-x-1">&larr;</span>
+          back to dashboard
         </NuxtLink>
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-4">
           <img
             v-if="guild.icon"
             :src="`https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png?size=128`"
+            height="56"
+            width="56"
             :alt="guild.name"
-            class="size-10 rounded-full"
+            class="w-14 h-14 rounded-xl"
+            :style="{ viewTransitionName: `guild-icon-${guild.id}` }"
           >
-          <h1 class="heading-1">
+          <h1
+            class="heading-1"
+            :style="{ viewTransitionName: `guild-name-${guild.id}` }"
+          >
             {{ guild.name }}
           </h1>
         </div>
       </div>
 
-      <div class="space-y-6">
+      <div class="flex flex-col gap-6">
         <!-- Calendar feed -->
         <AppCard>
           <h2 class="heading-2 mb-3">
             calendar feed
           </h2>
-          <p class="text-body text-sm mb-3">
+          <p class="text-sm text-text-muted mb-3">
             subscribe to this URL in your calendar app:
           </p>
           <CopyableCode :value="calendarUrl" />
-          <div class="flex flex-wrap gap-3 mt-4">
+          <div class="flex gap-3 mt-4 flex-wrap">
             <AppButton
               variant="primary"
               size="sm"
               :href="webcalUrl"
             >
               open in calendar app
-            </AppButton>
-            <AppButton
-              variant="ghost"
-              size="sm"
-              :to="`/calendar/${guild.calendarSlug}`"
-            >
-              view calendar
             </AppButton>
           </div>
         </AppCard>
@@ -169,26 +187,14 @@ async function disconnectAtproto() {
           <h2 class="heading-2 mb-3">
             settings
           </h2>
-          <fieldset class="space-y-3">
-            <legend class="text-body text-sm mb-2">
+          <fieldset class="border-none p-0 m-0">
+            <legend class="text-sm text-text-muted mb-2">
               default event timezone
             </legend>
-            <div class="flex flex-col sm:flex-row gap-3">
-              <label class="flex-1">
-                <span class="sr-only">Timezone</span>
-                <select
-                  v-model="selectedTimezone"
-                  class="select-base"
-                >
-                  <option
-                    v-for="tz in timezones"
-                    :key="tz"
-                    :value="tz"
-                  >
-                    {{ tz }}
-                  </option>
-                </select>
-              </label>
+            <div class="flex items-end gap-3">
+              <div class="flex-1">
+                <TimezoneSelect v-model="selectedTimezone" />
+              </div>
               <AppButton
                 v-if="selectedTimezone !== guild.timezone"
                 variant="primary"
@@ -197,7 +203,7 @@ async function disconnectAtproto() {
                 :disabled="savingTimezone"
                 @click="saveTimezone"
               >
-                Save
+                save
               </AppButton>
             </div>
           </fieldset>
@@ -209,25 +215,33 @@ async function disconnectAtproto() {
             atproto
           </h2>
           <div v-if="guild.atprotoDid && atprotoSessionValid">
-            <div class="flex items-center justify-between gap-3">
+            <div class="flex items-center justify-between gap-4 flex-wrap">
               <div class="flex items-center gap-3">
                 <img
                   v-if="atprotoProfile?.avatar"
                   :src="atprotoProfile.avatar"
                   :alt="atprotoProfile.displayName || atprotoProfile.handle || guild.atprotoDid"
-                  class="size-8 rounded-full"
+                  height="40"
+                  width="40"
+                  class="w-10 h-10 rounded-full"
                 >
+                <div
+                  v-else
+                  class="w-10 h-10 rounded-full bg-primary/20 text-primary font-mono font-bold grid place-items-center"
+                >
+                  {{ (atprotoProfile?.displayName || atprotoProfile?.handle || guild.atprotoDid).charAt(0).toUpperCase() }}
+                </div>
                 <div>
                   <div class="flex items-center gap-2">
-                    <span class="badge-success">connected</span>
+                    <span class="badge-accent">connected</span>
                     <span
                       v-if="atprotoProfile?.handle"
-                      class="text-ink font-600 text-sm"
+                      class="font-mono text-sm text-text-muted"
                     >
                       @{{ atprotoProfile.handle }}
                     </span>
                   </div>
-                  <p class="text-small mt-0.5">
+                  <p class="text-xs text-text-muted mt-0.5">
                     events will be published to this account
                   </p>
                 </div>
@@ -246,13 +260,13 @@ async function disconnectAtproto() {
           <div v-else>
             <p
               v-if="guild.atprotoDid && !atprotoSessionValid"
-              class="text-warning text-sm mb-3"
+              class="text-sm text-pop mb-3"
             >
-              previously connected to <code class="code-inline text-xs">{{ guild.atprotoDid }}</code>, but the session has expired
+              previously connected to <code class="font-mono text-xs bg-surface-raised px-1.5 py-0.5 rounded">{{ guild.atprotoDid }}</code>, but the session has expired
             </p>
             <p
               v-else
-              class="text-body text-sm mb-3"
+              class="text-sm text-text-muted mb-3"
             >
               connect an atproto account to publish events to the atmosphere
             </p>
@@ -260,7 +274,7 @@ async function disconnectAtproto() {
             <StyledDialog
               v-model:open="atprotoDialogOpen"
               :title="guild.atprotoDid ? 'reconnect atproto' : 'connect atproto'"
-              description="Enter your handle (e.g. alice.bsky.social) to connect your account. Events from this Discord server will be published to your data repo."
+              description="enter your handle (e.g. alice.bsky.social) to connect your account. events from this Discord server will be published to your data repo."
             >
               <template #trigger>
                 <AppButton variant="secondary">
@@ -269,11 +283,11 @@ async function disconnectAtproto() {
               </template>
 
               <form
-                class="space-y-4"
+                class="flex flex-col gap-4"
                 @submit.prevent="connectAtproto"
               >
-                <label class="block">
-                  <span class="text-sm font-600 text-ink mb-1 block">handle</span>
+                <label class="flex flex-col gap-1.5">
+                  <span class="text-sm font-mono text-text-muted">handle</span>
                   <input
                     v-model="atprotoHandle"
                     type="text"
@@ -302,53 +316,45 @@ async function disconnectAtproto() {
         <section>
           <h2 class="heading-2 mb-4">
             upcoming events
-            <span class="text-ink-muted font-400 text-lg">({{ events.length }})</span>
+            <span class="text-text-muted font-normal text-sm">({{ events.length }})</span>
           </h2>
           <EmptyState
             v-if="events.length === 0"
             title="no events synced yet"
-            description="Events will appear after the next sync cycle (up to 5 minutes)."
+            description="events will appear after the next sync cycle (up to 5 minutes)."
             :show-mascot="false"
           />
           <div
             v-else
-            class="space-y-3"
+            class="flex flex-col gap-2"
           >
             <NuxtLink
               v-for="ev in events"
               :key="ev.id"
               :to="`/event/${ev.id}`"
-              class="card-interactive p-5 block no-underline"
+              class="card-interactive p-4 no-underline text-text group"
             >
-              <div class="flex items-center justify-between gap-3">
-                <div class="min-w-0">
-                  <strong class="text-ink font-600">{{ ev.name }}</strong>
-                  <div class="flex flex-wrap items-center gap-2 mt-1">
+              <div class="flex items-center justify-between">
+                <div class="flex flex-col gap-1">
+                  <strong class="font-mono text-sm">{{ ev.name }}</strong>
+                  <div class="flex items-center gap-2 flex-wrap">
                     <NuxtTime
                       :datetime="ev.startTime"
                       date-style="medium"
                       time-style="short"
-                      class="text-small"
+                      class="text-xs text-text-muted"
                     />
                     <span
                       v-if="ev.recurrenceRule"
-                      class="badge-accent"
+                      class="badge-primary"
                     >recurring</span>
                     <span
                       v-if="ev.location"
-                      class="text-small truncate"
+                      class="badge-muted"
                     >{{ ev.location }}</span>
                   </div>
                 </div>
-                <svg
-                  class="size-5 text-ink-muted shrink-0 group-hover/card:text-primary transition-colors"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                ><path
-                  fill-rule="evenodd"
-                  d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
-                  clip-rule="evenodd"
-                /></svg>
+                <span class="i-heroicons-chevron-right-20-solid w-5 h-5 text-text-muted group-hover:text-text transition-transform group-hover:translate-x-0.5 shrink-0" />
               </div>
             </NuxtLink>
           </div>
@@ -358,60 +364,105 @@ async function disconnectAtproto() {
         <section v-if="pastEvents.length > 0">
           <button
             type="button"
-            class="flex items-center gap-2 heading-2 mb-4 cursor-pointer select-none"
+            class="flex items-center gap-2 text-sm text-text-muted font-mono cursor-pointer hover:text-text transition-colors bg-transparent border-none p-0"
             @click="showPastEvents = !showPastEvents"
           >
-            <svg
-              class="size-5 text-ink-muted transition-transform duration-200"
+            <span
+              class="i-heroicons-chevron-right-20-solid w-4 h-4 transition-transform"
               :class="showPastEvents ? 'rotate-90' : ''"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            ><path
-              fill-rule="evenodd"
-              d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
-              clip-rule="evenodd"
-            /></svg>
+            />
             past events
-            <span class="text-ink-muted font-400 text-lg">({{ pastEvents.length }})</span>
+            <span class="text-text-dimmed">({{ pastEvents.length }})</span>
           </button>
           <div
             v-if="showPastEvents"
-            class="space-y-3"
+            class="flex flex-col gap-2 mt-3"
           >
             <NuxtLink
               v-for="ev in pastEvents"
               :key="ev.id"
               :to="`/event/${ev.id}`"
-              class="card-interactive p-5 block no-underline opacity-70"
+              class="card-interactive p-4 no-underline text-text group opacity-70"
             >
-              <div class="flex items-center justify-between gap-3">
-                <div class="min-w-0">
-                  <strong class="text-ink font-600">{{ ev.name }}</strong>
-                  <div class="flex flex-wrap items-center gap-2 mt-1">
+              <div class="flex items-center justify-between">
+                <div class="flex flex-col gap-1">
+                  <strong class="font-mono text-sm">{{ ev.name }}</strong>
+                  <div class="flex items-center gap-2 flex-wrap">
                     <NuxtTime
                       :datetime="ev.startTime"
                       date-style="medium"
                       time-style="short"
-                      class="text-small"
+                      class="text-xs text-text-muted"
                     />
                     <span
                       v-if="EVENT_STATUS_LABEL[ev.status]"
-                      :class="ev.status === 3 ? 'badge-success' : 'badge-primary'"
+                      class="badge-muted"
                     >{{ EVENT_STATUS_LABEL[ev.status] }}</span>
                   </div>
                 </div>
-                <svg
-                  class="size-5 text-ink-muted shrink-0 group-hover/card:text-primary transition-colors"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                ><path
-                  fill-rule="evenodd"
-                  d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
-                  clip-rule="evenodd"
-                /></svg>
+                <span class="i-heroicons-chevron-right-20-solid w-5 h-5 text-text-muted group-hover:text-text transition-transform group-hover:translate-x-0.5 shrink-0" />
               </div>
             </NuxtLink>
           </div>
+        </section>
+
+        <!-- Remove server -->
+        <section class="mt-10 pt-6 border-t border-border">
+          <AppCard>
+            <div class="flex items-center justify-between gap-4 flex-wrap">
+              <div>
+                <h2 class="heading-3 text-danger">
+                  remove server
+                </h2>
+                <p class="text-sm text-text-muted mt-1">
+                  stop syncing events and remove the calendar feed. you can add it back at any point.
+                </p>
+              </div>
+              <StyledDialog
+                v-model:open="confirmRemoveOpen"
+                title="remove server"
+                description="this will stop syncing events and delete the calendar feed. any existing subscribers will lose access. you can re-register the server later."
+              >
+                <template #trigger>
+                  <AppButton
+                    variant="danger"
+                    size="sm"
+                  >
+                    remove
+                  </AppButton>
+                </template>
+                <div class="flex flex-col gap-4">
+                  <p class="text-sm text-text-muted">
+                    are you sure you want to remove <strong class="text-text">{{ guild.name }}</strong>?
+                  </p>
+                  <p
+                    v-if="removeError"
+                    class="text-sm text-danger"
+                  >
+                    {{ removeError }}
+                  </p>
+                  <div class="flex justify-end gap-3">
+                    <AppButton
+                      variant="ghost"
+                      size="sm"
+                      @click="confirmRemoveOpen = false"
+                    >
+                      cancel
+                    </AppButton>
+                    <AppButton
+                      variant="danger"
+                      size="sm"
+                      :loading="removing"
+                      :disabled="removing"
+                      @click="removeServer"
+                    >
+                      remove server
+                    </AppButton>
+                  </div>
+                </div>
+              </StyledDialog>
+            </div>
+          </AppCard>
         </section>
       </div>
     </template>
@@ -419,8 +470,8 @@ async function disconnectAtproto() {
     <!-- Not found -->
     <template v-else>
       <EmptyState
-        title="Guild not found"
-        description="This server doesn't exist or you don't have access to it."
+        title="guild not found"
+        description="this server doesn't exist or you don't have access to it."
       >
         <template #action>
           <AppButton

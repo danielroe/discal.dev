@@ -20,6 +20,27 @@ export async function setGuild(guild: StoredGuild): Promise<void> {
   await kv().setItem(`slug:${guild.calendarSlug}`, guild.id)
 }
 
+export async function removeGuild(guildId: string): Promise<void> {
+  const guild = await getGuild(guildId)
+
+  // Remove all events for this guild
+  const eventIds = await getEventIndex(guildId)
+  await Promise.all(eventIds.map(id => kv().removeItem(`event:${guildId}:${id}`)))
+  await kv().removeItem(`events:${guildId}`)
+
+  // Remove the guild itself
+  await kv().removeItem(`guild:${guildId}`)
+
+  // Remove from index
+  const index = await getGuildIndex()
+  await kv().setItem('guild:index', index.filter(id => id !== guildId))
+
+  // Remove slug mapping
+  if (guild?.calendarSlug) {
+    await kv().removeItem(`slug:${guild.calendarSlug}`)
+  }
+}
+
 export async function getGuildIndex(): Promise<string[]> {
   return await kv().getItem<string[]>('guild:index') ?? []
 }

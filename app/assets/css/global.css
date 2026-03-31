@@ -1,0 +1,416 @@
+/*
+ * discal.dev — Global Design Tokens & Animations
+ *
+ * Architecture:
+ *   Layer 1: Raw Color Palette (--color-*)
+ *   Layer 2: Semantic Tokens (--c-*)
+ *   Layer 3: UnoCSS theme consumes --c-* via rgb(var(--c-*))
+ *
+ * Values are raw R G B channels so UnoCSS can apply /alpha modifiers.
+ * Exception: mascot-specific tokens use full color values where needed
+ * for SVG fill/stroke compatibility.
+ */
+
+/* ================================================================
+   Layer 1 — Raw Color Palette
+   ================================================================ */
+
+:root {
+  /* Magenta / Hot Pink */
+  --color-magenta-300: 249 168 212;
+  --color-magenta-400: 244 114 182;
+  --color-magenta-500: 236 72 153;
+  --color-magenta-600: 219 39 119;
+  --color-magenta-700: 190 24 93;
+  --color-magenta-800: 157 23 77;
+  --color-magenta-900: 131 24 67;
+  --color-magenta-950: 80 7 36;
+
+  /* Cyan */
+  --color-cyan-300: 103 232 249;
+  --color-cyan-400: 34 211 238;
+  --color-cyan-500: 6 182 212;
+  --color-cyan-600: 8 145 178;
+  --color-cyan-700: 14 116 144;
+
+  /* Yellow */
+  --color-yellow-300: 253 224 71;
+  --color-yellow-400: 250 204 21;
+  --color-yellow-500: 234 179 8;
+
+  /* Rose (for blush / soft accents) */
+  --color-rose-300: 253 164 175;
+  --color-rose-400: 251 113 133;
+  --color-rose-500: 244 63 94;
+
+  /* Red (for danger / errors) */
+  --color-red-400: 248 113 113;
+  --color-red-500: 239 68 68;
+  --color-red-600: 220 38 38;
+
+  /* Green (for success states) */
+  --color-green-400: 74 222 128;
+  --color-green-500: 34 197 94;
+
+  /* Neutrals */
+  --color-neutral-0: 255 255 255;
+  --color-neutral-50: 250 250 250;
+  --color-neutral-100: 245 245 245;
+  --color-neutral-200: 229 229 229;
+  --color-neutral-300: 212 212 212;
+  --color-neutral-400: 163 163 163;
+  --color-neutral-500: 115 115 115;
+  --color-neutral-600: 82 82 82;
+  --color-neutral-700: 64 64 64;
+  --color-neutral-800: 38 38 38;
+  --color-neutral-850: 28 28 38;
+  --color-neutral-900: 23 23 23;
+  --color-neutral-950: 10 10 15;
+}
+
+/* ================================================================
+   Layer 2 — Semantic Tokens (Light Mode)
+   ================================================================ */
+
+:root {
+  /* Layout */
+  --c-bg: var(--color-neutral-0);
+  --c-surface: var(--color-neutral-50);
+  --c-surface-raised: var(--color-neutral-100);
+  --c-text: var(--color-neutral-900);
+  --c-text-muted: var(--color-neutral-500);
+  --c-text-dimmed: var(--color-neutral-400);
+
+  /* Brand: Primary (Magenta) */
+  --c-primary: var(--color-magenta-500);
+  --c-primary-hover: var(--color-magenta-600);
+  --c-primary-active: var(--color-magenta-700);
+  --c-primary-text: var(--color-neutral-0);
+  --c-primary-soft: var(--color-magenta-300);
+
+  /* Brand: Accent (Cyan) */
+  --c-accent: var(--color-cyan-500);
+  --c-accent-hover: var(--color-cyan-600);
+  --c-accent-text: var(--color-neutral-0);
+
+  /* Brand: Pop (Yellow) */
+  --c-pop: var(--color-yellow-400);
+  --c-pop-hover: var(--color-yellow-500);
+
+  /* Brand: Blush (Rose) */
+  --c-blush: var(--color-rose-400);
+
+  /* UI: Borders */
+  --c-border: var(--color-neutral-200);
+  --c-border-emphasis: var(--color-neutral-300);
+
+  /* UI: Cards */
+  --c-card-bg: var(--color-neutral-0);
+  --c-card-border: var(--color-neutral-200);
+
+  /* UI: Inputs */
+  --c-input-bg: var(--color-neutral-0);
+  --c-input-border: var(--color-neutral-300);
+  --c-input-focus: var(--color-magenta-500);
+
+  /* UI: Code blocks */
+  --c-code-bg: var(--color-neutral-900);
+  --c-code-text: var(--color-neutral-100);
+
+  /* State: Danger */
+  --c-danger: var(--color-red-500);
+  --c-danger-hover: var(--color-red-600);
+  --c-danger-text: var(--color-neutral-0);
+
+  /* State: Success */
+  --c-success: var(--color-green-500);
+
+  /* Mascot — unique to SVG, not semantic */
+  --c-mascot-ball-highlight: #f0f0fa;
+  --c-mascot-ball-mid: #c8c8dc;
+  --c-mascot-ball-edge: #9494b4;
+  --c-mascot-ball-stroke: #7777a0;
+  --c-mascot-facet: rgba(140, 140, 170, 0.5);
+  --c-mascot-shadow: rgba(0, 0, 0, 0.08);
+  --c-mascot-white: #ffffff;
+  --c-mascot-eye: #1e1b4b;
+
+  /* Glow / effects */
+  --c-glow-primary: rgba(236, 72, 153, 0.35);
+  --c-glow-accent: rgba(6, 182, 212, 0.35);
+}
+
+/* ================================================================
+   Layer 2 — Semantic Tokens (Dark Mode)
+   ================================================================ */
+
+.dark {
+  /* Layout */
+  --c-bg: var(--color-neutral-950);
+  --c-surface: var(--color-neutral-850);
+  --c-surface-raised: var(--color-neutral-800);
+  --c-text: var(--color-neutral-100);
+  --c-text-muted: var(--color-neutral-400);
+  --c-text-dimmed: var(--color-neutral-600);
+
+  /* Brand: Primary (Magenta — lighter in dark mode) */
+  --c-primary: var(--color-magenta-400);
+  --c-primary-hover: var(--color-magenta-500);
+  --c-primary-active: var(--color-magenta-600);
+  --c-primary-text: var(--color-neutral-0);
+  --c-primary-soft: var(--color-magenta-900);
+
+  /* Brand: Accent (Cyan — lighter in dark mode) */
+  --c-accent: var(--color-cyan-400);
+  --c-accent-hover: var(--color-cyan-500);
+  --c-accent-text: var(--color-neutral-950);
+
+  /* Brand: Pop */
+  --c-pop: var(--color-yellow-300);
+  --c-pop-hover: var(--color-yellow-500);
+
+  /* Brand: Blush */
+  --c-blush: var(--color-rose-300);
+
+  /* UI: Borders */
+  --c-border: var(--color-neutral-800);
+  --c-border-emphasis: var(--color-neutral-700);
+
+  /* UI: Cards */
+  --c-card-bg: var(--color-neutral-850);
+  --c-card-border: var(--color-neutral-800);
+
+  /* UI: Inputs */
+  --c-input-bg: var(--color-neutral-800);
+  --c-input-border: var(--color-neutral-700);
+  --c-input-focus: var(--color-magenta-400);
+
+  /* UI: Code blocks */
+  --c-code-bg: var(--color-neutral-900);
+  --c-code-text: var(--color-neutral-200);
+
+  /* State: Danger */
+  --c-danger: var(--color-red-400);
+  --c-danger-hover: var(--color-red-500);
+
+  /* State: Success */
+  --c-success: var(--color-green-400);
+
+  /* Mascot — brighter in dark mode so it doesn't disappear */
+  --c-mascot-ball-highlight: #b8b8d0;
+  --c-mascot-ball-mid: #9090aa;
+  --c-mascot-ball-edge: #686880;
+  --c-mascot-ball-stroke: #707088;
+  --c-mascot-facet: rgba(200, 200, 230, 0.2);
+  --c-mascot-shadow: rgba(0, 0, 0, 0.5);
+  --c-mascot-white: #e0e0ec;
+  --c-mascot-eye: #1e1b4b;
+
+  /* Glow / effects */
+  --c-glow-primary: rgba(244, 114, 182, 0.25);
+  --c-glow-accent: rgba(34, 211, 238, 0.25);
+}
+
+/* ================================================================
+   Base Styles
+   ================================================================ */
+
+body {
+  background-color: rgb(var(--c-bg));
+  color: rgb(var(--c-text));
+}
+
+/* Improve focus visibility globally */
+:focus-visible {
+  outline: 2px solid rgb(var(--c-primary));
+  outline-offset: 2px;
+}
+
+/* ================================================================
+   Dark Mode Animated Background
+   ================================================================ */
+
+.dark body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 40%, rgba(236, 72, 153, 0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 80% at 80% 60%, rgba(6, 182, 212, 0.05) 0%, transparent 70%);
+  animation: gradient-rotate 30s linear infinite;
+}
+
+/* ================================================================
+   Keyframes
+   ================================================================ */
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes sparkle-pulse {
+  0%, 100% {
+    opacity: 0.4;
+    transform: scale(0.8) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2) rotate(15deg);
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(var(--reveal-offset, 1rem));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes gradient-rotate {
+  0% { transform: rotate(0deg) scale(1.5); }
+  100% { transform: rotate(360deg) scale(1.5); }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes particle-float {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  50% {
+    transform: translate(var(--drift-x, 20px), var(--drift-y, -40px)) scale(1.5);
+    opacity: 0.8;
+  }
+  90% {
+    opacity: 0;
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 var(--c-glow-primary);
+  }
+  50% {
+    box-shadow: 0 0 20px 4px var(--c-glow-primary);
+  }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -48%) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes check-bounce {
+  0% { transform: scale(0); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+@keyframes chevron-bounce {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(3px); }
+}
+
+/* ================================================================
+   View Transitions
+   ================================================================ */
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.25s;
+  animation-timing-function: ease-in-out;
+}
+
+::view-transition-old(root) {
+  animation-name: fade-in;
+  animation-direction: reverse;
+}
+
+::view-transition-new(root) {
+  animation-name: reveal;
+}
+
+/* ================================================================
+   Reduced Motion
+   ================================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
+
+  .dark body::before {
+    animation: none;
+    transform: scale(1.5);
+  }
+}
+
+/* ================================================================
+   Scrollbar (subtle, themed)
+   ================================================================ */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(var(--c-border));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(var(--c-border-emphasis));
+}
+
+/* ================================================================
+   Selection highlight
+   ================================================================ */
+
+::selection {
+  background: rgb(var(--c-primary) / 0.3);
+  color: rgb(var(--c-text));
+}

@@ -24,8 +24,8 @@ const open = defineModel<boolean>('open', { default: false })
       <slot name="trigger" />
     </DialogTrigger>
     <DialogPortal>
-      <DialogOverlay class="dialog-overlay" />
-      <DialogContent class="dialog-content">
+      <DialogOverlay class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 motion-safe:animate-fade-in" />
+      <DialogContent class="fixed left-1/2 top-1/2 z-50 bg-surface border border-border rounded-2xl shadow-2xl p-6 w-full max-w-md motion-safe:animate-slide-up">
         <div class="flex items-start justify-between gap-4 mb-4">
           <div>
             <DialogTitle class="heading-3">
@@ -33,7 +33,7 @@ const open = defineModel<boolean>('open', { default: false })
             </DialogTitle>
             <DialogDescription
               v-if="description"
-              class="text-body mt-1"
+              class="text-sm text-text-muted mt-1"
             >
               {{ description }}
             </DialogDescription>
@@ -41,20 +41,10 @@ const open = defineModel<boolean>('open', { default: false })
           <DialogClose as-child>
             <button
               type="button"
-              class="btn-icon shrink-0 -mt-1 -mr-1"
+              class="shrink-0 p-1 rounded-full text-text-muted hover:text-text hover:bg-surface-raised transition-all hover:rotate-90 cursor-pointer"
               aria-label="Close"
             >
-              <svg
-                class="size-5"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                  clip-rule="evenodd"
-                />
-              </svg>
+              <span class="i-heroicons-x-mark-20-solid w-5 h-5" />
             </button>
           </DialogClose>
         </div>

@@ -8,22 +8,19 @@ withDefaults(defineProps<{
 })
 
 const sizeClasses: Record<string, string> = {
-  sm: 'size-8',
-  md: 'size-12',
-  lg: 'size-24',
-  xl: 'size-40',
+  sm: 'w-8 h-8',
+  md: 'w-16 h-16',
+  lg: 'w-24 h-24',
+  xl: 'w-40 h-40 sm:w-48 sm:h-48',
 }
 </script>
 
 <template>
-  <div
-    class="inline-flex items-center justify-center"
-    :class="[sizeClasses[size], animate ? 'animate-float' : '']"
-  >
+  <div :class="sizeClasses[size]">
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 512 512"
-      class="size-full"
+      class="w-full h-full"
       role="img"
       aria-label="discal mascot"
     >
@@ -213,7 +210,7 @@ const sizeClasses: Record<string, string> = {
       <path
         d="M 198 140 Q 256 156 314 140"
         fill="none"
-        stroke="rgb(var(--c-accent))"
+        stroke="rgb(var(--c-pop))"
         stroke-width="7"
         stroke-linecap="round"
       />
@@ -221,13 +218,13 @@ const sizeClasses: Record<string, string> = {
         cx="256"
         cy="30"
         r="18"
-        fill="rgb(var(--c-accent))"
+        fill="rgb(var(--c-pop))"
       />
       <circle
         cx="256"
         cy="30"
         r="11"
-        fill="rgb(var(--c-accent-hover))"
+        fill="rgb(var(--c-pop-hover))"
       />
 
       <!-- Eyes -->
@@ -320,10 +317,10 @@ const sizeClasses: Record<string, string> = {
         opacity="0.5"
       />
 
-      <!-- Sparkles: outer <g> positions, inner <g> animates from its own center -->
+      <!-- Sparkles -->
       <g transform="translate(420, 120)">
         <g
-          :class="animate ? 'animate-sparkle' : ''"
+          :class="animate ? 'motion-safe:animate-sparkle-pulse' : ''"
           style="transform-origin: 0 0"
         >
           <line
@@ -331,7 +328,7 @@ const sizeClasses: Record<string, string> = {
             y1="-22"
             x2="0"
             y2="22"
-            stroke="rgb(var(--c-primary))"
+            stroke="rgb(var(--c-accent))"
             stroke-width="5"
             stroke-linecap="round"
           />
@@ -340,7 +337,7 @@ const sizeClasses: Record<string, string> = {
             y1="0"
             x2="22"
             y2="0"
-            stroke="rgb(var(--c-primary))"
+            stroke="rgb(var(--c-accent))"
             stroke-width="5"
             stroke-linecap="round"
           />
@@ -349,7 +346,7 @@ const sizeClasses: Record<string, string> = {
             y1="-13"
             x2="13"
             y2="13"
-            stroke="rgb(var(--c-primary))"
+            stroke="rgb(var(--c-accent))"
             stroke-width="3.5"
             stroke-linecap="round"
           />
@@ -358,7 +355,7 @@ const sizeClasses: Record<string, string> = {
             y1="-13"
             x2="-13"
             y2="13"
-            stroke="rgb(var(--c-primary))"
+            stroke="rgb(var(--c-accent))"
             stroke-width="3.5"
             stroke-linecap="round"
           />
@@ -366,7 +363,7 @@ const sizeClasses: Record<string, string> = {
       </g>
       <g transform="translate(88, 150)">
         <g
-          :class="animate ? 'animate-sparkle' : ''"
+          :class="animate ? 'motion-safe:animate-sparkle-pulse' : ''"
           style="transform-origin: 0 0; animation-delay: 0.7s"
         >
           <line
@@ -374,7 +371,7 @@ const sizeClasses: Record<string, string> = {
             y1="-16"
             x2="0"
             y2="16"
-            stroke="rgb(var(--c-accent))"
+            stroke="rgb(var(--c-pop))"
             stroke-width="4.5"
             stroke-linecap="round"
           />
@@ -383,7 +380,7 @@ const sizeClasses: Record<string, string> = {
             y1="0"
             x2="16"
             y2="0"
-            stroke="rgb(var(--c-accent))"
+            stroke="rgb(var(--c-pop))"
             stroke-width="4.5"
             stroke-linecap="round"
           />
@@ -392,7 +389,7 @@ const sizeClasses: Record<string, string> = {
             y1="-10"
             x2="10"
             y2="10"
-            stroke="rgb(var(--c-accent))"
+            stroke="rgb(var(--c-pop))"
             stroke-width="3"
             stroke-linecap="round"
           />
@@ -401,7 +398,7 @@ const sizeClasses: Record<string, string> = {
             y1="-10"
             x2="-10"
             y2="10"
-            stroke="rgb(var(--c-accent))"
+            stroke="rgb(var(--c-pop))"
             stroke-width="3"
             stroke-linecap="round"
           />
@@ -409,7 +406,7 @@ const sizeClasses: Record<string, string> = {
       </g>
       <g transform="translate(440, 360)">
         <g
-          :class="animate ? 'animate-sparkle' : ''"
+          :class="animate ? 'motion-safe:animate-sparkle-pulse' : ''"
           style="transform-origin: 0 0; animation-delay: 1.3s"
         >
           <line
@@ -417,7 +414,7 @@ const sizeClasses: Record<string, string> = {
             y1="-13"
             x2="0"
             y2="13"
-            stroke="rgb(var(--c-primary))"
+            stroke="rgb(var(--c-accent))"
             stroke-width="4"
             stroke-linecap="round"
           />
@@ -426,7 +423,7 @@ const sizeClasses: Record<string, string> = {
             y1="0"
             x2="13"
             y2="0"
-            stroke="rgb(var(--c-primary))"
+            stroke="rgb(var(--c-accent))"
             stroke-width="4"
             stroke-linecap="round"
           />
@@ -434,7 +431,7 @@ const sizeClasses: Record<string, string> = {
       </g>
       <g transform="translate(78, 380)">
         <g
-          :class="animate ? 'animate-sparkle' : ''"
+          :class="animate ? 'motion-safe:animate-sparkle-pulse' : ''"
           style="transform-origin: 0 0; animation-delay: 0.4s"
         >
           <line
@@ -442,7 +439,7 @@ const sizeClasses: Record<string, string> = {
             y1="-10"
             x2="0"
             y2="10"
-            stroke="rgb(var(--c-accent))"
+            stroke="rgb(var(--c-pop))"
             stroke-width="3.5"
             stroke-linecap="round"
           />
@@ -451,7 +448,7 @@ const sizeClasses: Record<string, string> = {
             y1="0"
             x2="10"
             y2="0"
-            stroke="rgb(var(--c-accent))"
+            stroke="rgb(var(--c-pop))"
             stroke-width="3.5"
             stroke-linecap="round"
           />

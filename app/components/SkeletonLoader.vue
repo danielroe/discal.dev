@@ -9,24 +9,25 @@ withDefaults(defineProps<{
   lines: 1,
 })
 
-const variantClasses: Record<string, string> = {
-  text: 'skeleton-text',
-  heading: 'skeleton-heading',
-  card: 'skeleton-card',
-  circle: 'skeleton rounded-full size-10',
-  custom: 'skeleton',
+const variantClass: Record<string, string> = {
+  text: 'h-4 rounded',
+  heading: 'h-8 w-48 rounded-lg',
+  card: 'h-32 rounded-xl',
+  circle: 'rounded-full',
+  custom: 'rounded',
 }
 </script>
 
 <template>
   <div
     v-if="lines > 1"
-    class="flex flex-col gap-2.5"
+    class="flex flex-col gap-3"
   >
     <div
       v-for="i in lines"
       :key="i"
-      :class="variantClasses[variant]"
+      class="skeleton skeleton-shimmer"
+      :class="variantClass[variant]"
       :style="{
         width: i === lines ? '70%' : width,
         height,
@@ -37,7 +38,8 @@ const variantClasses: Record<string, string> = {
   </div>
   <div
     v-else
-    :class="variantClasses[variant]"
+    class="skeleton skeleton-shimmer"
+    :class="variantClass[variant]"
     :style="{ width, height }"
     role="presentation"
     aria-hidden="true"

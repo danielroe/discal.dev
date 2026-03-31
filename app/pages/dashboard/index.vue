@@ -2,12 +2,17 @@
 const { loggedIn } = useUserSession()
 const config = useRuntimeConfig()
 
-const { data: guilds, status: guildsStatus, error, refresh: refreshGuilds } = useLazyFetch('/api/guilds', {
-  getCachedData: (key, nuxtApp) => nuxtApp.payload.data[key] ?? nuxtApp.static.data[key],
-})
-const { data: available, status: availableStatus, refresh: refreshAvailable } = useLazyFetch('/api/guilds/available', {
-  getCachedData: (key, nuxtApp) => nuxtApp.payload.data[key] ?? nuxtApp.static.data[key],
-})
+const [
+  { data: guilds, status: guildsStatus, error, refresh: refreshGuilds },
+  { data: available, status: availableStatus, refresh: refreshAvailable },
+] = await Promise.all([
+  useLazyFetch('/api/guilds', {
+    getCachedData: (key, nuxtApp) => nuxtApp.payload.data[key] ?? nuxtApp.static.data[key],
+  }),
+  useLazyFetch('/api/guilds/available', {
+    getCachedData: (key, nuxtApp) => nuxtApp.payload.data[key] ?? nuxtApp.static.data[key],
+  }),
+])
 
 const loading = computed(() => guildsStatus.value === 'pending' || availableStatus.value === 'pending')
 const refreshing = ref(false)
@@ -54,7 +59,7 @@ async function registerGuild(guildId: string, guildName: string) {
 </script>
 
 <template>
-  <div class="page-container">
+  <div>
     <div class="flex items-center justify-between mb-8">
       <h1 class="heading-1">
         dashboard
@@ -66,22 +71,22 @@ async function registerGuild(guildId: string, guildName: string) {
         :loading="refreshing"
         @click="refreshAll"
       >
-        Refresh
+        refresh
       </AppButton>
     </div>
 
     <!-- Auth gate -->
     <template v-if="!loggedIn || error">
       <EmptyState
-        title="Sign in to get started"
-        description="Connect your Discord account to manage your servers and calendar feeds."
+        title="sign in to get started"
+        description="connect your Discord account to manage your servers and calendar feeds."
       >
         <template #action>
           <AppButton
             variant="primary"
             href="/auth/discord"
           >
-            Sign in with Discord
+            sign in with Discord
           </AppButton>
         </template>
       </EmptyState>
@@ -89,9 +94,9 @@ async function registerGuild(guildId: string, guildName: string) {
 
     <!-- Loading skeletons -->
     <template v-else-if="loading">
-      <div class="space-y-4">
+      <div class="flex flex-col gap-4">
         <SkeletonLoader variant="heading" />
-        <div class="grid sm:grid-cols-2 gap-4">
+        <div class="flex flex-col gap-3">
           <SkeletonLoader
             v-for="i in 4"
             :key="i"
@@ -111,68 +116,78 @@ async function registerGuild(guildId: string, guildName: string) {
         <h2 class="heading-2 mb-4">
           your servers
         </h2>
-        <div class="grid sm:grid-cols-2 gap-4">
+        <div class="flex flex-col gap-3">
           <NuxtLink
             v-for="guild in guilds"
             :key="guild.id"
             :to="`/dashboard/${guild.id}`"
-            class="card-interactive p-5 block no-underline"
+            class="card-interactive p-4 no-underline text-text group"
           >
-            <div class="flex items-center justify-between gap-3">
-              <div>
-                <div class="flex items-center gap-3 mb-2">
+            <div class="flex items-center justify-between">
+              <div class="flex flex-col gap-1.5">
+                <div class="flex items-center gap-3">
                   <img
                     v-if="guild.icon"
                     :src="`https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png?size=64`"
                     :alt="guild.name"
-                    class="size-8 rounded-full"
+                    height="40"
+                    width="40"
+                    class="w-10 h-10 rounded-full"
+                    :style="{ viewTransitionName: `guild-icon-${guild.id}` }"
                   >
                   <div
                     v-else
-                    class="size-8 rounded-full bg-primary-subtle flex items-center justify-center text-primary-text text-xs font-700"
+                    class="w-10 h-10 rounded-full bg-primary/20 text-primary font-mono font-bold grid place-items-center"
+                    :style="{ viewTransitionName: `guild-icon-${guild.id}` }"
                   >
                     {{ guild.name.charAt(0) }}
                   </div>
-                  <h3 class="heading-3">
+                  <h3
+                    class="heading-3"
+                    :style="{ viewTransitionName: `guild-name-${guild.id}` }"
+                  >
                     {{ guild.name }}
                   </h3>
                 </div>
-                <code class="code-inline text-xs">/calendar/{{ guild.calendarSlug }}.ics</code>
+                <code class="font-mono text-xs text-text-muted">/calendar/{{ guild.calendarSlug }}.ics</code>
               </div>
-              <svg
-                class="size-5 text-ink-muted shrink-0 group-hover/card:text-primary transition-colors"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              ><path
-                fill-rule="evenodd"
-                d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
-                clip-rule="evenodd"
-              /></svg>
+              <span class="i-heroicons-chevron-right-20-solid w-5 h-5 text-text-muted group-hover:text-text transition-transform group-hover:translate-x-0.5" />
             </div>
           </NuxtLink>
         </div>
       </section>
 
-      <!-- Ready to set up -->
+      <!-- Ready to enable -->
       <section
         v-if="unregisteredWithBot.length > 0"
         class="mb-10"
       >
         <h2 class="heading-2 mb-2">
-          ready to set up
+          ready to enable
         </h2>
-        <p class="text-body mb-4">
-          The discal bot is in these servers. Click to register and create a calendar feed.
+        <p class="text-sm text-text-muted mb-4">
+          the discal bot is in these servers. click to enable syncing to a calendar feed.
         </p>
-        <div class="grid sm:grid-cols-2 gap-4">
+        <div class="flex flex-col gap-3">
           <AppCard
             v-for="guild in unregisteredWithBot"
             :key="guild.id"
           >
-            <div class="flex items-center justify-between gap-3">
-              <div class="flex items-center gap-2">
-                <span class="size-2 rounded-full bg-success animate-pulse-dot" />
-                <strong class="text-ink font-600">{{ guild.name }}</strong>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <img
+                  v-if="guild.icon"
+                  :src="`https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png?size=64`"
+                  :alt="guild.name"
+                  width="32"
+                  height="32"
+                  class="w-8 h-8 rounded-full"
+                >
+                <span
+                  v-else
+                  class="w-8 h-8 rounded-full bg-primary/20 text-primary text-xs font-mono font-bold grid place-items-center shrink-0"
+                >{{ guild.name.charAt(0) }}</span>
+                <strong class="font-mono text-sm">{{ guild.name }}</strong>
               </div>
               <AppButton
                 variant="secondary"
@@ -181,14 +196,14 @@ async function registerGuild(guildId: string, guildName: string) {
                 :disabled="registering === guild.id"
                 @click="registerGuild(guild.id, guild.name)"
               >
-                set up
+                enable
               </AppButton>
             </div>
           </AppCard>
         </div>
         <p
           v-if="registerError"
-          class="text-danger text-sm mt-3"
+          class="text-sm text-danger mt-3"
         >
           {{ registerError }}
         </p>
@@ -197,17 +212,17 @@ async function registerGuild(guildId: string, guildName: string) {
       <!-- Add bot -->
       <section>
         <AppCard highlight>
-          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div class="flex items-center justify-between gap-4 flex-wrap">
             <div>
-              <h2 class="heading-3 mb-1">
+              <h2 class="heading-2">
                 add to a server
               </h2>
-              <p class="text-body text-sm">
+              <p class="text-sm text-text-muted mt-1">
                 <template v-if="withoutBot.length > 0">
-                  You manage {{ withoutBot.length }} server{{ withoutBot.length === 1 ? '' : 's' }} that don't have the bot yet.
+                  you manage {{ withoutBot.length }} server{{ withoutBot.length === 1 ? '' : 's' }} that don't have the bot yet.
                 </template>
                 <template v-else>
-                  Add the discal bot to start syncing events.
+                  add the discal bot to start syncing events.
                 </template>
               </p>
             </div>

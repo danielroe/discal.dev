@@ -35,9 +35,9 @@ const activeRsvpStatus = computed(() => {
 })
 
 const rsvpStatusLabel: Record<string, string> = {
-  going: 'Going',
-  interested: 'Interested',
-  notgoing: 'Not going',
+  going: 'going',
+  interested: 'interested',
+  notgoing: 'not going',
 }
 
 async function submitRsvp(status: 'going' | 'interested' | 'notgoing') {
@@ -75,28 +75,29 @@ function loginAtproto() {
 </script>
 
 <template>
-  <div class="page-container">
+  <div>
     <template v-if="event && guild">
       <article>
         <!-- Header -->
         <div class="mb-8">
           <NuxtLink
             :to="`/dashboard/${guild.id}`"
-            class="link text-sm mb-2 inline-block"
+            class="link-accent font-mono text-sm inline-flex items-center gap-1 mb-4 group no-underline"
           >
-            &larr; {{ guild.name }}
+            <span class="transition-transform group-hover:-translate-x-1">&larr;</span>
+            {{ guild.name }}
           </NuxtLink>
-          <h1 class="heading-1 mb-4">
+          <h1 class="heading-1">
             {{ event.name }}
           </h1>
 
           <!-- Info grid -->
-          <dl class="grid sm:grid-cols-2 gap-3">
+          <dl class="grid sm:grid-cols-2 gap-3 mt-6 m-0">
             <AppCard padding="sm">
-              <dt class="text-small mb-1">
+              <dt class="text-xs font-mono uppercase text-text-muted tracking-wider mb-1">
                 when
               </dt>
-              <dd class="text-ink font-600 text-sm">
+              <dd class="text-sm m-0">
                 <NuxtTime
                   :datetime="event.startTime"
                   date-style="full"
@@ -104,7 +105,7 @@ function loginAtproto() {
                 />
                 <template v-if="event.endTime">
                   <br>
-                  <span class="text-ink-muted font-400">&ndash;</span>
+                  <span class="text-text-muted">&ndash;</span>
                   <NuxtTime
                     :datetime="event.endTime"
                     date-style="full"
@@ -118,19 +119,19 @@ function loginAtproto() {
               v-if="event.location"
               padding="sm"
             >
-              <dt class="text-small mb-1">
+              <dt class="text-xs font-mono uppercase text-text-muted tracking-wider mb-1">
                 where
               </dt>
-              <dd class="text-ink font-600 text-sm">
+              <dd class="text-sm m-0">
                 {{ event.location }}
               </dd>
             </AppCard>
 
             <AppCard padding="sm">
-              <dt class="text-small mb-1">
+              <dt class="text-xs font-mono uppercase text-text-muted tracking-wider mb-1">
                 interested
               </dt>
-              <dd class="text-ink font-600 text-sm">
+              <dd class="text-sm m-0">
                 {{ event.userCount }} on Discord
               </dd>
             </AppCard>
@@ -139,11 +140,11 @@ function loginAtproto() {
               v-if="event.recurrenceRule"
               padding="sm"
             >
-              <dt class="text-small mb-1">
+              <dt class="text-xs font-mono uppercase text-text-muted tracking-wider mb-1">
                 recurrence
               </dt>
-              <dd>
-                <span class="badge-accent">Recurring event</span>
+              <dd class="text-sm m-0">
+                <span class="badge-primary">recurring event</span>
               </dd>
             </AppCard>
           </dl>
@@ -154,10 +155,10 @@ function loginAtproto() {
           v-if="event.description"
           class="mb-6"
         >
-          <h2 class="heading-3 mb-2">
+          <h2 class="heading-2 mb-3">
             description
           </h2>
-          <p class="text-body whitespace-pre-line">
+          <p class="text-sm text-text-muted whitespace-pre-wrap leading-relaxed m-0">
             {{ event.description }}
           </p>
         </AppCard>
@@ -168,10 +169,10 @@ function loginAtproto() {
           class="mb-6"
         >
           <h2 class="heading-2 mb-4">
-            RSVPs
+            rsvps
             <span
               v-if="rsvpTotal > 0"
-              class="text-ink-muted font-400 text-lg"
+              class="text-text-muted font-normal text-sm"
             >({{ rsvpTotal }})</span>
           </h2>
 
@@ -186,13 +187,15 @@ function loginAtproto() {
               :href="`https://bsky.app/profile/${rsvp.handle || rsvp.did}`"
               target="_blank"
               rel="noopener"
-              class="inline-flex items-center gap-1.5 badge-blush no-underline hover:opacity-80 transition-opacity"
+              class="inline-flex items-center gap-1.5 bg-surface-raised rounded-full px-2.5 py-1 text-xs text-text-muted hover:text-text transition-colors no-underline"
             >
               <img
                 v-if="rsvp.avatar"
                 :src="rsvp.avatar"
+                height="20"
+                width="20"
                 :alt="rsvp.displayName || rsvp.handle || rsvp.did"
-                class="size-4 rounded-full"
+                class="w-5 h-5 rounded-full"
               >
               {{ rsvp.displayName || rsvp.handle || rsvp.did }}
             </a>
@@ -201,35 +204,36 @@ function loginAtproto() {
           <!-- RSVP buttons (signed in with Bluesky) -->
           <div
             v-if="isBlueskyUser && canRsvp"
-            class="space-y-3"
           >
             <p
               v-if="!activeRsvpStatus"
-              class="text-body text-sm"
+              class="text-sm text-text-muted mb-3"
             >
-              RSVP via atproto:
+              rsvp via atproto:
             </p>
             <p
               v-else
-              class="text-small"
+              class="text-sm text-text-muted mb-3"
             >
               update your response:
             </p>
-            <div class="flex flex-wrap gap-2">
+            <div class="flex gap-2 flex-wrap">
               <AppButton
-                :variant="activeRsvpStatus === 'going' ? 'primary' : 'secondary'"
+                :variant="activeRsvpStatus === 'going' ? 'primary' : 'ghost'"
                 size="sm"
                 :loading="rsvpLoading"
                 :disabled="rsvpLoading"
+                :class="activeRsvpStatus === 'going' ? 'ring-2 ring-primary/50' : ''"
                 @click="submitRsvp('going')"
               >
                 going
               </AppButton>
               <AppButton
-                :variant="activeRsvpStatus === 'interested' ? 'primary' : 'secondary'"
+                :variant="activeRsvpStatus === 'interested' ? 'primary' : 'ghost'"
                 size="sm"
                 :loading="rsvpLoading"
                 :disabled="rsvpLoading"
+                :class="activeRsvpStatus === 'interested' ? 'ring-2 ring-primary/50' : ''"
                 @click="submitRsvp('interested')"
               >
                 interested
@@ -239,6 +243,7 @@ function loginAtproto() {
                 size="sm"
                 :loading="rsvpLoading"
                 :disabled="rsvpLoading"
+                :class="activeRsvpStatus === 'notgoing' ? 'ring-2 ring-primary/50' : ''"
                 @click="submitRsvp('notgoing')"
               >
                 not going
@@ -246,42 +251,42 @@ function loginAtproto() {
             </div>
             <p
               v-if="rsvpError"
-              class="text-danger text-sm"
+              class="text-sm text-danger mt-3"
             >
               {{ rsvpError }}
             </p>
           </div>
 
-          <!-- Not published yet -->
+          <!-- Not published to atproto yet -->
           <p
             v-else-if="!canRsvp"
-            class="text-body text-sm"
+            class="text-sm text-text-muted"
           >
-            RSVP will be available once this event is published to atproto.
+            rsvp will be available once this event is published to atproto.
           </p>
 
-          <!-- Need to sign in -->
+          <!-- Event is on atproto, but user needs to connect their own account -->
           <div v-else>
-            <p class="text-body text-sm mb-3">
-              Sign in with atproto to RSVP.
+            <p class="text-sm text-text-muted mb-3">
+              connect your atproto account to rsvp. your response will be stored in your own data repo.
             </p>
             <StyledDialog
               v-model:open="atprotoDialogOpen"
-              title="Sign in with atproto"
-              description="Enter your handle to sign in and RSVP to this event. Your RSVP will be stored in your own data repo."
+              title="sign in with atproto"
+              description="enter your handle to sign in and rsvp to this event. your rsvp will be stored in your own data repo."
             >
               <template #trigger>
                 <AppButton variant="secondary">
-                  Sign in to RSVP
+                  connect atproto
                 </AppButton>
               </template>
 
               <form
-                class="space-y-4"
+                class="flex flex-col gap-4"
                 @submit.prevent="loginAtproto"
               >
-                <label class="block">
-                  <span class="text-sm font-600 text-ink mb-1 block">Handle</span>
+                <label class="flex flex-col gap-1.5">
+                  <span class="text-sm font-mono text-text-muted">handle</span>
                   <input
                     v-model="atprotoHandle"
                     type="text"
@@ -295,10 +300,10 @@ function loginAtproto() {
                     variant="ghost"
                     @click="atprotoDialogOpen = false"
                   >
-                    Cancel
+                    cancel
                   </AppButton>
                   <AppButton variant="primary">
-                    Sign in
+                    sign in
                   </AppButton>
                 </div>
               </form>
@@ -311,7 +316,7 @@ function loginAtproto() {
           <h2 class="heading-2 mb-4">
             links
           </h2>
-          <div class="flex flex-wrap items-center gap-4">
+          <div class="flex gap-3 flex-wrap">
             <AppButton
               variant="secondary"
               size="sm"
@@ -324,7 +329,7 @@ function loginAtproto() {
               :href="`https://smokesignal.events/${guild.atprotoDid}/${event.atprotoUri.split('/').pop()}`"
               target="_blank"
               rel="noopener"
-              class="link text-sm"
+              class="link-accent text-sm inline-flex items-center gap-1"
             >
               view on Smoke Signal &rarr;
             </a>
@@ -336,8 +341,8 @@ function loginAtproto() {
     <!-- Not found -->
     <EmptyState
       v-else
-      title="Event not found"
-      description="This event doesn't exist or may have been removed."
+      title="event not found"
+      description="this event doesn't exist or may have been removed."
     />
   </div>
 </template>

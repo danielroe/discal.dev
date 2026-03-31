@@ -6,8 +6,8 @@
       <stop offset="100%" stop-color="#8888aa"/>
     </radialGradient>
     <linearGradient id="hat" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#8b5cf6"/>
-      <stop offset="100%" stop-color="#5b21b6"/>
+      <stop offset="0%" stop-color="#ec4899"/>
+      <stop offset="100%" stop-color="#be185d"/>
     </linearGradient>
   </defs>
 
@@ -17,7 +17,7 @@
   <!-- Disco ball body -->
   <circle cx="256" cy="272" r="186" fill="url(#ball)" stroke="#7777a0" stroke-width="4"/>
 
-  <!-- Facet grid - horizontal (bold, fewer lines) -->
+  <!-- Facet grid - horizontal -->
   <path d="M 115 190 Q 256 168 397 190" fill="none" stroke="#9999bb" stroke-width="3.5" opacity="0.7"/>
   <path d="M 82 235 Q 256 210 430 235" fill="none" stroke="#9999bb" stroke-width="3.5" opacity="0.7"/>
   <path d="M 72 280 Q 256 255 440 280" fill="none" stroke="#9999bb" stroke-width="3.5" opacity="0.7"/>
@@ -25,7 +25,7 @@
   <path d="M 90 365 Q 256 340 422 365" fill="none" stroke="#9999bb" stroke-width="3.5" opacity="0.7"/>
   <path d="M 125 400 Q 256 378 387 400" fill="none" stroke="#9999bb" stroke-width="3.5" opacity="0.7"/>
 
-  <!-- Facet grid - vertical (bold, fewer lines) -->
+  <!-- Facet grid - vertical -->
   <path d="M 180 90 Q 168 272 180 454" fill="none" stroke="#9999bb" stroke-width="3.5" opacity="0.7"/>
   <path d="M 256 86 Q 256 272 256 458" fill="none" stroke="#9999bb" stroke-width="3.5" opacity="0.7"/>
   <path d="M 332 90 Q 344 272 332 454" fill="none" stroke="#9999bb" stroke-width="3.5" opacity="0.7"/>
@@ -44,14 +44,14 @@
   <circle cx="210" cy="190" r="60" fill="#fff" opacity="0.15"/>
 
   <!-- Party hat -->
-  <polygon points="256,30 190,148 322,148" fill="url(#hat)" stroke="#4c1d95" stroke-width="4" stroke-linejoin="round"/>
+  <polygon points="256,30 190,148 322,148" fill="url(#hat)" stroke="#9d174d" stroke-width="4" stroke-linejoin="round"/>
   <!-- Hat band -->
-  <path d="M 198 140 Q 256 156 314 140" fill="none" stroke="#fbbf24" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 198 140 Q 256 156 314 140" fill="none" stroke="#facc15" stroke-width="7" stroke-linecap="round"/>
   <!-- Hat pom-pom -->
-  <circle cx="256" cy="30" r="18" fill="#fbbf24"/>
-  <circle cx="256" cy="30" r="11" fill="#f59e0b"/>
+  <circle cx="256" cy="30" r="18" fill="#facc15"/>
+  <circle cx="256" cy="30" r="11" fill="#eab308"/>
 
-  <!-- Eyes - BIG for small-size readability -->
+  <!-- Eyes -->
   <ellipse cx="206" cy="262" rx="42" ry="46" fill="white" stroke="#4444" stroke-width="3"/>
   <ellipse cx="214" cy="264" rx="24" ry="28" fill="#1e1b4b"/>
   <ellipse cx="224" cy="252" rx="10" ry="11" fill="white"/>
@@ -63,31 +63,31 @@
   <circle cx="306" cy="274" r="5" fill="white" opacity="0.4"/>
 
   <!-- Smile -->
-  <path d="M 222 314 Q 256 346 290 314" fill="none" stroke="#4c1d95" stroke-width="5" stroke-linecap="round"/>
+  <path d="M 222 314 Q 256 346 290 314" fill="none" stroke="#9d174d" stroke-width="5" stroke-linecap="round"/>
 
   <!-- Blush -->
-  <ellipse cx="172" cy="305" rx="20" ry="12" fill="#f9a8d4" opacity="0.5"/>
-  <ellipse cx="340" cy="305" rx="20" ry="12" fill="#f9a8d4" opacity="0.5"/>
+  <ellipse cx="172" cy="305" rx="20" ry="12" fill="#fb7185" opacity="0.5"/>
+  <ellipse cx="340" cy="305" rx="20" ry="12" fill="#fb7185" opacity="0.5"/>
 
-  <!-- Sparkles - LARGE, bold -->
+  <!-- Sparkles -->
   <g transform="translate(420, 120)">
-    <line x1="0" y1="-22" x2="0" y2="22" stroke="#8b5cf6" stroke-width="5" stroke-linecap="round"/>
-    <line x1="-22" y1="0" x2="22" y2="0" stroke="#8b5cf6" stroke-width="5" stroke-linecap="round"/>
-    <line x1="-13" y1="-13" x2="13" y2="13" stroke="#8b5cf6" stroke-width="3.5" stroke-linecap="round"/>
-    <line x1="13" y1="-13" x2="-13" y2="13" stroke="#8b5cf6" stroke-width="3.5" stroke-linecap="round"/>
+    <line x1="0" y1="-22" x2="0" y2="22" stroke="#22d3ee" stroke-width="5" stroke-linecap="round"/>
+    <line x1="-22" y1="0" x2="22" y2="0" stroke="#22d3ee" stroke-width="5" stroke-linecap="round"/>
+    <line x1="-13" y1="-13" x2="13" y2="13" stroke="#22d3ee" stroke-width="3.5" stroke-linecap="round"/>
+    <line x1="13" y1="-13" x2="-13" y2="13" stroke="#22d3ee" stroke-width="3.5" stroke-linecap="round"/>
   </g>
   <g transform="translate(88, 150)">
-    <line x1="0" y1="-16" x2="0" y2="16" stroke="#f59e0b" stroke-width="4.5" stroke-linecap="round"/>
-    <line x1="-16" y1="0" x2="16" y2="0" stroke="#f59e0b" stroke-width="4.5" stroke-linecap="round"/>
-    <line x1="-10" y1="-10" x2="10" y2="10" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/>
-    <line x1="10" y1="-10" x2="-10" y2="10" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/>
+    <line x1="0" y1="-16" x2="0" y2="16" stroke="#facc15" stroke-width="4.5" stroke-linecap="round"/>
+    <line x1="-16" y1="0" x2="16" y2="0" stroke="#facc15" stroke-width="4.5" stroke-linecap="round"/>
+    <line x1="-10" y1="-10" x2="10" y2="10" stroke="#facc15" stroke-width="3" stroke-linecap="round"/>
+    <line x1="10" y1="-10" x2="-10" y2="10" stroke="#facc15" stroke-width="3" stroke-linecap="round"/>
   </g>
   <g transform="translate(440, 360)">
-    <line x1="0" y1="-13" x2="0" y2="13" stroke="#8b5cf6" stroke-width="4" stroke-linecap="round"/>
-    <line x1="-13" y1="0" x2="13" y2="0" stroke="#8b5cf6" stroke-width="4" stroke-linecap="round"/>
+    <line x1="0" y1="-13" x2="0" y2="13" stroke="#22d3ee" stroke-width="4" stroke-linecap="round"/>
+    <line x1="-13" y1="0" x2="13" y2="0" stroke="#22d3ee" stroke-width="4" stroke-linecap="round"/>
   </g>
   <g transform="translate(78, 380)">
-    <line x1="0" y1="-10" x2="0" y2="10" stroke="#fbbf24" stroke-width="3.5" stroke-linecap="round"/>
-    <line x1="-10" y1="0" x2="10" y2="0" stroke="#fbbf24" stroke-width="3.5" stroke-linecap="round"/>
+    <line x1="0" y1="-10" x2="0" y2="10" stroke="#facc15" stroke-width="3.5" stroke-linecap="round"/>
+    <line x1="-10" y1="0" x2="10" y2="0" stroke="#facc15" stroke-width="3.5" stroke-linecap="round"/>
   </g>
 </svg>
