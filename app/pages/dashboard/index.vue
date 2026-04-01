@@ -73,7 +73,7 @@ async function registerGuild(guildId: string, guildName: string, guildIcon: stri
     </div>
 
     <!-- Auth gate -->
-    <template v-if="ready && (!loggedIn || error)">
+    <template v-if="ready && !loggedIn">
       <EmptyState
         title="sign in to get started"
         description="connect your Discord account to manage your servers and calendar feeds."
@@ -84,6 +84,23 @@ async function registerGuild(guildId: string, guildName: string, guildIcon: stri
             href="/auth/discord"
           >
             sign in with Discord
+          </AppButton>
+        </template>
+      </EmptyState>
+    </template>
+
+    <!-- Fetch error -->
+    <template v-else-if="error">
+      <EmptyState
+        title="something went wrong"
+        :description="error.message || 'Failed to load your servers. Your Discord session may have expired.'"
+      >
+        <template #action>
+          <AppButton
+            variant="primary"
+            href="/auth/discord"
+          >
+            sign in again
           </AppButton>
         </template>
       </EmptyState>
