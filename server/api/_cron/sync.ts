@@ -44,12 +44,13 @@ async function syncGuildEvents(h3Event: Parameters<typeof publishEventToAtproto>
     }
   }
 
+  // Keep the atproto session alive by calling restore() on each sync.
   if (guild.atprotoDid) {
     try {
       await getAtprotoAgent(h3Event, guild.atprotoDid)
     }
-    catch {
-      // Session is invalid — will be handled when publishing
+    catch (error) {
+      console.error(`AT Proto session refresh failed for guild ${guildId}:`, error)
     }
   }
 

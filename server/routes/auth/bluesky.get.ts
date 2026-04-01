@@ -1,6 +1,6 @@
 export default defineEventHandler(async (event) => {
   const query = getQuery(event)
-  const client = getAtprotoClient(event)
+  const client = event.context.atprotoClient
 
   // Step 1: No code = initial request, start the OAuth flow
   if (!query.code) {
