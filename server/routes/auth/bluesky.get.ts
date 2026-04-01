@@ -1,6 +1,9 @@
 export default defineEventHandler(async (event) => {
   const query = getQuery(event)
   const client = event.context.atprotoClient
+  if (!client) {
+    throw createError({ statusCode: 503, message: 'AT Proto OAuth is not configured' })
+  }
 
   // Step 1: No code = initial request, start the OAuth flow
   if (!query.code) {

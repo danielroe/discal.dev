@@ -27,6 +27,9 @@ const RSVP_STATUS_MAP: Record<string, string> = {
 
 export async function getAtprotoAgent(event: H3Event, did: string): Promise<Agent> {
   const client = event.context.atprotoClient
+  if (!client) {
+    throw new Error('AT Proto OAuth client is not available')
+  }
   try {
     const session = await client.restore(did)
     return new Agent(session)

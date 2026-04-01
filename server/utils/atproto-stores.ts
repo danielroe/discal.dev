@@ -82,7 +82,7 @@ export async function distributedLock<T>(key: string, fn: () => T | PromiseLike<
   return promise
 }
 
-export function createAtprotoClient(): NodeOAuthClient {
+export function createAtprotoClient(): NodeOAuthClient | null {
   const config = useRuntimeConfig()
   const blueskyConfig = config.oauth.bluesky as {
     scope?: string[]
@@ -90,6 +90,12 @@ export function createAtprotoClient(): NodeOAuthClient {
   }
 
   const appUrl = config.public.appUrl as string
+  // In production builds without a proper HTTPS appUrl (e.g. CI), skip client
+  // creation as AT Proto OAuth validation will reject the metadata.
+  if (!import.meta.dev && !appUrl.startsWith('https://')) {
+    return null
+  }
+
   const scopes = [...new Set(['atproto', ...blueskyConfig.scope ?? []])]
   const scope = scopes.join(' ')
   const redirectUri = `${appUrl}${blueskyConfig.redirectUris?.[0] ?? '/auth/bluesky'}`
