@@ -1,7 +1,7 @@
 <script setup lang="ts">
 definePageMeta({ middleware: 'auth' })
 
-const { loggedIn } = useUserSession()
+const { loggedIn, ready } = useUserSession()
 const config = useRuntimeConfig()
 
 const { data: guilds, status: guildsStatus, error, refresh: refreshGuilds } = useLazyFetch('/api/guilds', {
@@ -73,7 +73,7 @@ async function registerGuild(guildId: string, guildName: string, guildIcon: stri
     </div>
 
     <!-- Auth gate -->
-    <template v-if="!loggedIn || error">
+    <template v-if="ready && (!loggedIn || error)">
       <EmptyState
         title="sign in to get started"
         description="connect your Discord account to manage your servers and calendar feeds."
@@ -90,7 +90,7 @@ async function registerGuild(guildId: string, guildName: string, guildIcon: stri
     </template>
 
     <!-- Loading skeletons -->
-    <template v-else-if="loading">
+    <template v-else-if="!ready || loading">
       <div class="flex flex-col gap-4">
         <div class="skeleton skeleton-card skeleton-sparkles rounded-lg w-36 h-7" />
         <div class="flex flex-col gap-3">
