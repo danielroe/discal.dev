@@ -1,4 +1,4 @@
-import icalGenerator from 'ical-generator'
+import icalGenerator, { ICalEventStatus } from 'ical-generator'
 import type { ICalCalendarData, ICalEventData } from 'ical-generator'
 import { getVtimezoneComponent } from '@touch4it/ical-timezones'
 
@@ -9,46 +9,6 @@ const ENTITY_TYPE_LABELS: Record<number, string> = {
   1: 'Stage',
   2: 'Voice',
   3: 'External',
-}
-
-/**
- * Check whether a recurring event's next occurrence has been modified.
- *
- * Discord updates `scheduled_start_time` when a single occurrence is edited
- * but keeps `recurrence_rule.start` as the series anchor. If they represent
- * different times-of-day, the next occurrence has been rescheduled.
- */
-function getOccurrenceOverride(event: StoredEvent): Date | null {
-  if (!event.recurrenceRule) return null
-
-  const seriesStart = new Date(event.recurrenceRule.start)
-  const nextOccurrence = new Date(event.startTime)
-
-  // Compare time-of-day (hours + minutes) in UTC
-  if (
-    seriesStart.getUTCHours() === nextOccurrence.getUTCHours()
-    && seriesStart.getUTCMinutes() === nextOccurrence.getUTCMinutes()
-  ) {
-    return null
-  }
-
-  return nextOccurrence
-}
-
-/**
- * Compute what the original time of a modified occurrence would have been.
- *
- * Takes the date from the actual occurrence and the time-of-day from the
- * series anchor, producing the RECURRENCE-ID value (the occurrence that
- * "should have" happened before the edit).
- */
-function getOriginalOccurrenceTime(seriesStart: Date, modifiedOccurrence: Date): Date {
-  const original = new Date(modifiedOccurrence)
-  original.setUTCHours(seriesStart.getUTCHours())
-  original.setUTCMinutes(seriesStart.getUTCMinutes())
-  original.setUTCSeconds(seriesStart.getUTCSeconds())
-  original.setUTCMilliseconds(0)
-  return original
 }
 
 export function generateCalendar(guild: StoredGuild, events: StoredEvent[]): string {
@@ -65,10 +25,17 @@ export function generateCalendar(guild: StoredGuild, events: StoredEvent[]): str
   for (const event of events) {
     if (event.status === 4) continue
 
+    const discordUrl = `https://discord.com/events/${event.guildId}/${event.id}`
+
+    const descriptionParts: string[] = []
+    if (event.description) {
+      descriptionParts.push(event.description)
+    }
+    descriptionParts.push(discordUrl)
+    const description = descriptionParts.join('\n\n')
+
     // For recurring events, use the recurrence rule's start as DTSTART (the
     // series anchor) rather than scheduled_start_time (the next occurrence).
-    // Discord updates scheduled_start_time when a single occurrence is modified,
-    // which would incorrectly shift the entire series in the calendar.
     const start = event.recurrenceRule?.start
       ? new Date(event.recurrenceRule.start)
       : new Date(event.startTime)
@@ -76,11 +43,11 @@ export function generateCalendar(guild: StoredGuild, events: StoredEvent[]): str
     const eventData: ICalEventData = {
       id: `discord-${event.id}@discal.dev`,
       summary: event.name,
-      description: event.description || undefined,
+      description,
       start,
       end: event.endTime ? new Date(event.endTime) : undefined,
       timezone: guild.timezone,
-      url: `https://discord.com/events/${event.guildId}/${event.id}`,
+      url: discordUrl,
     }
 
     if (event.location) {
@@ -98,32 +65,31 @@ export function generateCalendar(guild: StoredGuild, events: StoredEvent[]): str
       icalEvent.repeating(discordRecurrenceToRRule(event.recurrenceRule))
     }
 
-    // If Discord has modified the next occurrence's time, emit an exception
-    // VEVENT with RECURRENCE-ID so the calendar shows the correct time for
-    // that specific occurrence without shifting the entire series.
-    const override = getOccurrenceOverride(event)
-    if (override && event.recurrenceRule) {
-      const originalTime = getOriginalOccurrenceTime(
-        new Date(event.recurrenceRule.start),
-        override,
-      )
+    // Emit exception VEVENTs for per-occurrence modifications.
+    // Discord provides these via guild_scheduled_event_exceptions
+    if (event.exceptions?.length) {
+      for (const exception of event.exceptions) {
+        const exceptionData: ICalEventData = {
+          id: `discord-${event.id}@discal.dev`,
+          recurrenceId: new Date(exception.originalStartTime),
+          summary: event.name,
+          description,
+          start: new Date(exception.startTime),
+          end: exception.endTime ? new Date(exception.endTime) : undefined,
+          timezone: guild.timezone,
+          url: discordUrl,
+        }
 
-      const exceptionData: ICalEventData = {
-        id: `discord-${event.id}@discal.dev`,
-        recurrenceId: originalTime,
-        summary: event.name,
-        description: event.description || undefined,
-        start: override,
-        end: event.endTime ? new Date(event.endTime) : undefined,
-        timezone: guild.timezone,
-        url: `https://discord.com/events/${event.guildId}/${event.id}`,
+        if (event.location) {
+          exceptionData.location = { title: event.location }
+        }
+
+        const exceptionEvent = calendar.createEvent(exceptionData)
+
+        if (exception.isCanceled) {
+          exceptionEvent.status(ICalEventStatus.CANCELLED)
+        }
       }
-
-      if (event.location) {
-        exceptionData.location = { title: event.location }
-      }
-
-      calendar.createEvent(exceptionData)
     }
   }
 

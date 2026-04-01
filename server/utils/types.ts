@@ -11,6 +11,14 @@ export interface DiscordRecurrenceRule {
   count: number | null
 }
 
+export interface DiscordScheduledEventException {
+  event_id: string
+  event_exception_id: string
+  scheduled_start_time: string
+  scheduled_end_time: string | null
+  is_canceled: boolean
+}
+
 export interface DiscordScheduledEvent {
   id: string
   guild_id: string
@@ -28,6 +36,7 @@ export interface DiscordScheduledEvent {
   user_count?: number
   image: string | null
   recurrence_rule: DiscordRecurrenceRule | null
+  guild_scheduled_event_exceptions?: DiscordScheduledEventException[]
 }
 
 export interface StoredGuild {
@@ -39,6 +48,13 @@ export interface StoredGuild {
   timezone: string
   calendarSlug: string
   createdAt: string
+}
+
+export interface StoredEventException {
+  originalStartTime: string
+  startTime: string
+  endTime: string | null
+  isCanceled: boolean
 }
 
 export interface StoredEvent {
@@ -53,6 +69,7 @@ export interface StoredEvent {
   entityType: 1 | 2 | 3
   status: 1 | 2 | 3 | 4
   recurrenceRule: DiscordRecurrenceRule | null
+  exceptions?: StoredEventException[]
   imageHash: string | null
   userCount: number
   atprotoUri: string | null

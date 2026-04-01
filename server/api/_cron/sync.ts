@@ -72,10 +72,35 @@ async function syncGuildEvents(h3Event: Parameters<typeof publishEventToAtproto>
       || stored.status !== de.status
       || (stored.location || null) !== (de.entity_metadata?.location || null)
       || JSON.stringify(stored.recurrenceRule) !== JSON.stringify(de.recurrence_rule)
+      || JSON.stringify(stored.exceptions) !== JSON.stringify(de.guild_scheduled_event_exceptions)
     )
     const needsPublish = !stored?.atprotoUri
     const needsRepublish = stored?.atprotoUri
       && stored.atprotoRecordVersion !== ATPROTO_RECORD_VERSION
+
+    // Convert Discord event exceptions to stored format.
+    // Each exception has a modified start time; the original occurrence time
+    // is inferred by taking the exception's date with the series anchor's
+    // time-of-day from recurrence_rule.start.
+    const exceptions = de.guild_scheduled_event_exceptions?.map((ex) => {
+      const exStart = new Date(ex.scheduled_start_time)
+      let originalStartTime = ex.scheduled_start_time
+      if (de.recurrence_rule) {
+        const seriesAnchor = new Date(de.recurrence_rule.start)
+        const original = new Date(exStart)
+        original.setUTCHours(seriesAnchor.getUTCHours())
+        original.setUTCMinutes(seriesAnchor.getUTCMinutes())
+        original.setUTCSeconds(seriesAnchor.getUTCSeconds())
+        original.setUTCMilliseconds(0)
+        originalStartTime = original.toISOString()
+      }
+      return {
+        originalStartTime,
+        startTime: ex.scheduled_start_time,
+        endTime: ex.scheduled_end_time,
+        isCanceled: ex.is_canceled,
+      }
+    })
 
     const eventData: StoredEvent = {
       id: de.id,
@@ -89,6 +114,7 @@ async function syncGuildEvents(h3Event: Parameters<typeof publishEventToAtproto>
       entityType: de.entity_type,
       status: de.status,
       recurrenceRule: de.recurrence_rule,
+      exceptions,
       imageHash: de.image,
       userCount: de.user_count || 0,
       atprotoUri: stored?.atprotoUri || null,

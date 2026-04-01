@@ -45,7 +45,6 @@ describe('generateCalendar', () => {
     expect(ics).toContain('SUMMARY:Test Event')
     expect(ics).toContain('BEGIN:VEVENT')
     expect(ics).not.toContain('RRULE')
-    expect(ics).not.toContain('RECURRENCE-ID')
   })
 
   it('generates a recurring event with RRULE', () => {
@@ -66,63 +65,19 @@ describe('generateCalendar', () => {
 
     const ics = generateCalendar(makeGuild(), [event])
     expect(ics).toContain('RRULE:FREQ=WEEKLY;INTERVAL=2;BYDAY=WE')
-    expect(ics).not.toContain('RECURRENCE-ID')
   })
 
-  it('emits a RECURRENCE-ID exception when next occurrence time differs from series anchor', () => {
-    // Series starts at 16:15, but Discord has moved today's occurrence to 15:15
-    const event = makeEvent({
-      startTime: '2026-04-01T15:15:00.000Z',
-      endTime: '2026-04-01T16:15:00.000Z',
-      recurrenceRule: {
-        start: '2026-03-18T16:15:00.000Z', // original series anchor at 16:15
-        end: null,
-        frequency: 2,
-        interval: 2,
-        by_weekday: [2],
-        by_n_weekday: null,
-        by_month: null,
-        by_month_day: null,
-        by_year_day: null,
-        count: null,
-      },
-    })
-
+  it('includes Discord event link in description', () => {
+    const event = makeEvent({ description: 'Come join us!' })
     const ics = generateCalendar(makeGuild(), [event])
-
-    // Should have two VEVENTs: the series and the exception
-    const veventCount = (ics.match(/BEGIN:VEVENT/g) || []).length
-    expect(veventCount).toBe(2)
-
-    // Series should use recurrence rule start as DTSTART
-    expect(ics).toContain('RRULE:FREQ=WEEKLY;INTERVAL=2;BYDAY=WE')
-
-    // Exception should have RECURRENCE-ID pointing to what the original
-    // occurrence time would have been (Apr 1 at 16:15)
-    expect(ics).toContain('RECURRENCE-ID')
+    expect(ics).toContain('https://discord.com/events/123/456')
+    expect(ics).toContain('Come join us!')
   })
 
-  it('does not emit exception when occurrence time matches series anchor', () => {
-    const event = makeEvent({
-      startTime: '2026-04-01T16:15:00.000Z',
-      recurrenceRule: {
-        start: '2026-03-18T16:15:00.000Z',
-        end: null,
-        frequency: 2,
-        interval: 2,
-        by_weekday: [2],
-        by_n_weekday: null,
-        by_month: null,
-        by_month_day: null,
-        by_year_day: null,
-        count: null,
-      },
-    })
-
+  it('includes Discord event link even without description', () => {
+    const event = makeEvent({ description: null })
     const ics = generateCalendar(makeGuild(), [event])
-    const veventCount = (ics.match(/BEGIN:VEVENT/g) || []).length
-    expect(veventCount).toBe(1)
-    expect(ics).not.toContain('RECURRENCE-ID')
+    expect(ics).toContain('https://discord.com/events/123/456')
   })
 
   it('skips cancelled events', () => {
