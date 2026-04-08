@@ -5,6 +5,35 @@ import { getVtimezoneComponent } from '@touch4it/ical-timezones'
 import type { StoredEvent, StoredGuild } from './types'
 import { discordRecurrenceToRRule } from './rrule'
 
+/**
+ * Convert a UTC ISO string to a local-time string in the given IANA timezone.
+ *
+ * ical-generator's `formatDate` uses `Date.getHours()` (server-local time)
+ * when a timezone is set, rather than converting to the specified timezone.
+ * To work around this we pre-convert dates to timezone-local strings (without
+ * a `Z` suffix) so the library emits the correct `DTSTART;TZID=…` values.
+ */
+function toLocalDateTimeString(utcISO: string, timezone: string): string {
+  const d = new Date(utcISO)
+  const parts = new Intl.DateTimeFormat('en-GB', {
+    timeZone: timezone,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+  }).formatToParts(d)
+
+  const p: Record<string, string> = {}
+  for (const part of parts) {
+    p[part.type] = part.value
+  }
+
+  return `${p.year}-${p.month}-${p.day}T${p.hour}:${p.minute}:${p.second}`
+}
+
 const ENTITY_TYPE_LABELS: Record<number, string> = {
   1: 'Stage',
   2: 'Voice',
@@ -36,16 +65,14 @@ export function generateCalendar(guild: StoredGuild, events: StoredEvent[]): str
 
     // For recurring events, use the recurrence rule's start as DTSTART (the
     // series anchor) rather than scheduled_start_time (the next occurrence).
-    const start = event.recurrenceRule?.start
-      ? new Date(event.recurrenceRule.start)
-      : new Date(event.startTime)
+    const startISO = event.recurrenceRule?.start || event.startTime
 
     const eventData: ICalEventData = {
       id: `discord-${event.id}@discal.dev`,
       summary: event.name,
       description,
-      start,
-      end: event.endTime ? new Date(event.endTime) : undefined,
+      start: toLocalDateTimeString(startISO, guild.timezone),
+      end: event.endTime ? toLocalDateTimeString(event.endTime, guild.timezone) : undefined,
       timezone: guild.timezone,
       url: discordUrl,
     }
@@ -71,11 +98,11 @@ export function generateCalendar(guild: StoredGuild, events: StoredEvent[]): str
       for (const exception of event.exceptions) {
         const exceptionData: ICalEventData = {
           id: `discord-${event.id}@discal.dev`,
-          recurrenceId: new Date(exception.originalStartTime),
+          recurrenceId: toLocalDateTimeString(exception.originalStartTime, guild.timezone),
           summary: event.name,
           description,
-          start: new Date(exception.startTime),
-          end: exception.endTime ? new Date(exception.endTime) : undefined,
+          start: toLocalDateTimeString(exception.startTime, guild.timezone),
+          end: exception.endTime ? toLocalDateTimeString(exception.endTime, guild.timezone) : undefined,
           timezone: guild.timezone,
           url: discordUrl,
         }

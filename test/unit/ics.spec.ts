@@ -169,4 +169,28 @@ describe('generateCalendar', () => {
     const ics = generateCalendar(makeGuild(), [event])
     expect(ics).not.toContain('BEGIN:VEVENT')
   })
+
+  it('converts UTC times to the guild timezone for DTSTART/DTEND', () => {
+    // 2026-04-01T16:15:00Z = 12:15 EDT in America/New_York (UTC-4 in April)
+    const guild = makeGuild({ timezone: 'America/New_York' })
+    const event = makeEvent({
+      startTime: '2026-04-01T16:15:00.000Z',
+      endTime: '2026-04-01T17:15:00.000Z',
+    })
+    const ics = generateCalendar(guild, [event])
+    expect(ics).toContain('DTSTART;TZID=America/New_York:20260401T121500')
+    expect(ics).toContain('DTEND;TZID=America/New_York:20260401T131500')
+  })
+
+  it('handles DST transitions correctly', () => {
+    // 2026-01-15T16:15:00Z = 11:15 EST in America/New_York (UTC-5 in January)
+    const guild = makeGuild({ timezone: 'America/New_York' })
+    const event = makeEvent({
+      startTime: '2026-01-15T16:15:00.000Z',
+      endTime: '2026-01-15T17:15:00.000Z',
+    })
+    const ics = generateCalendar(guild, [event])
+    expect(ics).toContain('DTSTART;TZID=America/New_York:20260115T111500')
+    expect(ics).toContain('DTEND;TZID=America/New_York:20260115T121500')
+  })
 })
