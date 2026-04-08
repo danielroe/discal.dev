@@ -40,19 +40,26 @@ export async function fetchGuildEvents(guildId: string): Promise<DiscordSchedule
     },
   )
 
-  await useStorage('kv').setItem(cacheKey, events, { ttl: 1 })
+  await useStorage('kv').setItem(cacheKey, events, { ttl: 60 })
   return events
 }
 
 export async function fetchGuildInfo(guildId: string): Promise<{ id: string, name: string, icon: string | null } | null> {
+  const cacheKey = `cache:guild-info:${guildId}`
+  const cached = await useStorage('kv').getItem<{ id: string, name: string, icon: string | null }>(cacheKey)
+  if (cached) return cached
+
   try {
     const config = useRuntimeConfig()
-    return await discordFetch<{ id: string, name: string, icon: string | null }>(
+    const info = await discordFetch<{ id: string, name: string, icon: string | null }>(
       `/guilds/${guildId}`,
       {
         headers: { Authorization: `Bot ${config.discordBotToken}` },
       },
     )
+
+    await useStorage('kv').setItem(cacheKey, info, { ttl: 300 })
+    return info
   }
   catch {
     return null
@@ -69,7 +76,7 @@ export async function checkBotInGuild(guildId: string): Promise<boolean> {
     await discordFetch(`/guilds/${guildId}`, {
       headers: { Authorization: `Bot ${config.discordBotToken}` },
     })
-    await useStorage('kv').setItem(cacheKey, true, { ttl: 1 })
+    await useStorage('kv').setItem(cacheKey, true, { ttl: 300 })
     return true
   }
   catch {
