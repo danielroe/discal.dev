@@ -14,7 +14,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
-      - uses: voidzero-dev/setup-vp@e34774bccb4e7d7f2e23514ca980177a71425e43 # v1
+      - uses: voidzero-dev/setup-vp@ca1c46663915d6c1042ae23bd39ab85718bfb0fa # v1
 
       - name: 📦 Install dependencies
         run: vp install
@@ -27,7 +27,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
-      - uses: voidzero-dev/setup-vp@e34774bccb4e7d7f2e23514ca980177a71425e43 # v1
+      - uses: voidzero-dev/setup-vp@ca1c46663915d6c1042ae23bd39ab85718bfb0fa # v1
 
       - name: 📦 Install dependencies
         run: vp install
@@ -51,7 +51,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
-      - uses: voidzero-dev/setup-vp@e34774bccb4e7d7f2e23514ca980177a71425e43 # v1
+      - uses: voidzero-dev/setup-vp@ca1c46663915d6c1042ae23bd39ab85718bfb0fa # v1
 
       - name: 📦 Install dependencies
         run: vp install
