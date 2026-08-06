@@ -1,13 +1,3 @@
-ignoredBuiltDependencies:
-  - '@parcel/watcher'
-  - core-js
-  - esbuild
-  - unrs-resolver
-  - vue-demi
-
-onlyBuiltDependencies:
-  - sharp
-
 catalog:
   vite: npm:@voidzero-dev/vite-plus-core@0.3.0
   vitest: 4.1.11
@@ -24,3 +14,10 @@ peerDependencyRules:
   allowedVersions:
     vite: '*'
     vitest: '*'
+
+allowBuilds:
+  '@parcel/watcher': false
+  core-js: false
+  esbuild: false
+  sharp: true
+  vue-demi: false
