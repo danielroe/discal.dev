@@ -1,7 +1,18 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "prCreation": "immediate",
-  "extends": [
-    "github>danielroe/renovate"
+  "extends": ["github>danielroe/renovate"],
+  "packageRules": [
+    {
+      "description": "vite-plus, its aliased vite/vitest catalog entries and the vitest packages it peers on must move together or the install breaks",
+      "groupName": "vite+ toolchain",
+      "matchPackageNames": [
+        "vite",
+        "vite-plus",
+        "vitest",
+        "@voidzero-dev/**",
+        "@vitest/**"
+      ]
+    }
   ]
 }
