@@ -64,5 +64,5 @@
     "vitest": "catalog:",
     "vue-tsc": "3.2.6"
   },
-  "packageManager": "pnpm@10.33.0"
+  "packageManager": "pnpm@11.20.0"
 }
