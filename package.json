@@ -45,7 +45,7 @@
   },
   "devDependencies": {
     "@iconify-json/heroicons": "1.2.3",
-    "@nuxt/eslint-plugin": "1.15.2",
+    "@nuxt/eslint-plugin": "1.17.0",
     "@nuxt/test-utils": "4.0.3",
     "@playwright/test": "1.59.1",
     "@stylistic/eslint-plugin": "5.10.0",
