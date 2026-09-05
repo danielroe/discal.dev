@@ -40,12 +40,12 @@
     "nuxt-og-image": "^6.2.6",
     "reka-ui": "^2.9.2",
     "rrule": "^2.8.1",
-    "vue": "3.5.34"
+    "vue": "3.5.42"
   },
   "devDependencies": {
     "@iconify-json/heroicons": "1.2.3",
     "@nuxt/eslint-plugin": "1.17.0",
-    "@nuxt/test-utils": "4.0.3",
+    "@nuxt/test-utils": "4.2.0",
     "@playwright/test": "1.59.1",
     "@stylistic/eslint-plugin": "5.10.0",
     "@unocss/preset-icons": "66.6.8",
