@@ -51,7 +51,7 @@
     "@unocss/preset-icons": "66.6.8",
     "@unocss/reset": "66.6.8",
     "@upstash/redis": "1.37.0",
-    "@vite-pwa/assets-generator": "1.0.2",
+    "@vite-pwa/assets-generator": "2.0.0",
     "@vite-pwa/nuxt": "1.1.1",
     "@vitest/browser-playwright": "4.1.11",
     "@vitest/coverage-v8": "4.1.11",
