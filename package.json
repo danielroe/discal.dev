@@ -27,7 +27,7 @@
   "dependencies": {
     "@atproto/api": "^0.19.5",
     "@atproto/oauth-client-node": "^0.3.17",
-    "@nuxt/fonts": "^0.14.0",
+    "@nuxt/fonts": "^1.0.0",
     "@nuxt/vite-builder": "^4.4.2",
     "@nuxtjs/color-mode": "^4.0.0",
     "@nuxtjs/html-validator": "^2.1.0",
